@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import isa.project.domain.CinemaTheater;
 import isa.project.domain.enumProjection;
-import isa.project.domain.enumProps;
 import isa.project.repositories.CinemaTheaterRepository;
 import isa.project.service.CinemaTheaterService;
 

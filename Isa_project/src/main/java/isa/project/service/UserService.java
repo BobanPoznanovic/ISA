@@ -3,11 +3,10 @@ package isa.project.service;
 import java.util.List;
 
 import isa.project.domain.User;
-import isa.project.domain.DTO.UserDTO;
 
 public interface UserService {
 	
-	User findOne(Long id);
+    User findOne(Long id);
 	
 	List<User> findAll();
 	
@@ -16,5 +15,7 @@ public interface UserService {
 	User delete(Long id);
 	
 	User update(Long id);
+	
+	User login(User user);
 
 }

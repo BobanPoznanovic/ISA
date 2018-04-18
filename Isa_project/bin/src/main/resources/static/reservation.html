@@ -1,0 +1,73 @@
+<script src="https://code.angularjs.org/1.3.0-rc.2/angular-messages.js"></script>
+<link href="src/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
+<script src="src/js/angular-datepicker.js"></script>
+<div role="form" ng-controller="ReservationController">
+
+        <!-- Top content -->
+        <div class="top-content" >
+        	<div class="container">
+                	
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-6 text">
+                        <div class="description">
+                        	<p>
+                        	</p>
+                        </div>
+                    </div>	
+                </div>
+                
+                <div class="row" >
+                    <div class="col-sm-10 col-sm-offset-1 show-forms" >
+                    	<span class="show-register-form active"><h3><em>Reservation</em></h3></span>
+                    </div>
+                </div>
+                 <div class="row register-form" >
+                    <div class="col-sm-4 col-sm-offset-1">
+						<form name="registrationForm" role="form" action="" method="post" class="r-form">
+							<div class="form-group">
+								
+							</div>
+	                    	<div class="form-group">
+	                        	<input type="text" name="search" placeholder="Search..." class="r-form-search form-control" id="search" ng-model="reservation.search" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-maxlength="50" required >
+	                        		<div ng-messages="reservationForm.name.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                        <div class="form-group">
+	                        	<label for="r-form-cinema">Cinema</label>
+	                        	<select name="cinema" size="1" class="r-form-cinema form-control" id="cinema" ng-model="reservation.cinema">
+								  <option value="volvo">Volvo</option>
+								  <option value="saab">Saab</option>
+								  <option value="fiat">Fiat</option>
+								  <option value="audi">Audi</option>
+								</select>
+	                  				<div ng-messages="reservationForm.cinema.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                        <div class="form-group">
+	                        	<label for="r-form-movie">Movie</label>
+	                        	<select name="movie" size="1" class="r-form-movie form-control" id="movie" ng-model="reservation.movie">
+								  <option value="volvo">Volvo</option>
+								  <option value="saab">Saab</option>
+								  <option value="fiat">Fiat</option>
+								  <option value="audi">Audi</option>
+								</select>
+	                  				<div ng-messages="reservationForm.movie.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                        <div class="form-group">
+	                       		<label for="r-form-date">Date</label>
+	                       		<input style="border-style: solid; border-width: 5px;" id="date" type="date">
+							</div>               
+	                         <div class="form-group">
+	                        	<label for="r-form-term">Term</label>
+	                        	<input type="text" name="city" placeholder="City..." class="r-form-email form-control" id="city" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-model="user.city" required>
+	                        		<div ng-messages="registrationForm.city.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+				            <a href="#/"><button ng-disabled="registrationForm.$invalid" type="submit" class="btn btn-danger" ng-click="registerUser(user)">Sign me up!</button></a>
+						</form>
+						
+						
+          
+                </div>
+                    
+        	</div>
+        </div>
+        </div>
+</div>

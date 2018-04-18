@@ -1,0 +1,97 @@
+<header>
+	<!-- Header desktop -->
+	<div ng-controller="HomePageController">
+	<div class="wrap-menu-header gradient1 trans-0-4">
+		<div class="container h-full">
+			<div class="wrap_header trans-0-3">
+				<!-- Logo -->
+				<div class="logo">
+					<a href="#/">
+						<img src="bootstrap/images/icons/movie.png"  height="50" width="110" alt="IMG-LOGO" data-logofixed="bootstrap/images/icons/logo2.png">
+					</a>
+				</div>
+
+				<!-- Menu -->
+				<div class="wrap_menu p-l-45 p-l-0-xl">
+					<nav class="menu"> 
+						<ul class="main_menu">
+							<li>
+								<button class="btn btn-large" ng-click="show(0); getLoggedInUser()">HOME</button> 
+							</li>		
+							<li>
+								<button class="btn btn-large" ng-click="show(1)">THEATER</button> 
+							</li>
+							<li>
+								<button class="btn btn-large" ng-click="show(2)">CINEMA</button> 
+							</li>	
+							<li>
+								<button class="btn btn-large" ng-click="show(3)">FRIENDS</button> 
+							</li>	
+							<li>
+								<button class="btn btn-large" ng-click="show(4)">RESERVATION</button> 
+							</li>
+							<li> 
+								<button class="btn btn-large" ng-click="show(5)">SETTINGS</button> 
+							</li>	
+							<li> 
+								<button class="btn btn-large" ng-click="logout()">LOG OUT</button>
+							</li>	
+									<!--  href="../userPages/userSettings.html"	-->	
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	
+		<div class="col-sm-4 col-sm-offset-1" valign="bottom" ng-if="numberView == 0">
+			<p class="text-center">PROFILE INFO</p>
+           	   <div class="form-group">
+           		<p class="text-dark" for="name"><em>First name</em></p>
+               	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="loggedIn.name" readonly>{{loggedIn}}
+               </div>
+               
+               <div class="form-group">
+               	<p class="text-dark" for="name"><em>Last name</em></p>
+               	<input type="text" name="surname" class="r-form-last-name form-control" id="surname" ng-model="loggedIn.surname" readonly>
+               </div>
+               
+               <div class="form-group">
+               	<p class="text-dark" for="name"><em>Email</em></p>
+               	<input type="email" name="email" class="r-form-email form-control" id="email" ng-model="loggedIn.email" readonly>
+               </div>
+               
+               <!-- <div class="form-group">
+               	<p class="text-dark" for="name"><em>City</em></p>
+               	<input type="text" name="city" class="r-form-email form-control" id="city" ng-model="loggedIn.city" readonly>
+               </div>
+               
+                <div class="form-group">
+               	<p class="text-dark" for="name"><em>Phone number</em></p>
+               	<input type="text" name="phoneNumber" class="r-form-email form-control" id="phone" ng-model="loggedIn.phone" readonly>
+               </div> -->
+               
+			</div>
+			<div ng-if="numberView == 3" ng-include="'userPages/userFriends.html'"></div>
+			<div ng-if="numberView == 5" ng-include="'userPages/userSettings.html'"></div>
+			<div ng-if="lastSearch == 'friends'" ng-include="'userPages/userFriendsTable.html'">
+	</div>
+	</div>
+</header>
+
+
+
+<!-- Back to top -->
+<div class="btn-back-to-top bg0-hov" id="myBtn">
+	<span class="symbol-btn-back-to-top">
+		<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+	</span>
+</div>
+
+<!-- Container Selection1 -->
+<div id="dropDownSelect1"></div>
+
+<!-- </div> -->
+
+
+
+

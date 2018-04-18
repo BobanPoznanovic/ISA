@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import isa.project.domain.User;
-import isa.project.domain.DTO.UserDTO;
 import isa.project.repositories.UserRepository;
 import isa.project.service.UserService;
 
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User findOne(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findOne(id);
 	}
 
 	@Override
@@ -74,6 +73,9 @@ public class UserServiceImpl implements UserService{
 //		userRepository.update(id);
 	}
 	
-	
-
+	@Override
+	public User login(User user) {
+		String email = user.getEmail();
+		return this.userRepository.findByEmail(email);
+	}
 }

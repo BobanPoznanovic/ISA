@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import isa.project.domain.CinemaTheater;
 import isa.project.domain.enumProjection;
-import isa.project.domain.enumProps;
 import isa.project.service.CinemaTheaterService;
 
 @RestController
