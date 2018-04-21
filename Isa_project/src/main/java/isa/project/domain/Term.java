@@ -1,6 +1,15 @@
 package isa.project.domain;
 
 import java.util.Date;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.nio.charset.Charset;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +36,6 @@ public class Term {
 	@Column(name = "TERM_ID", updatable = false, nullable = false, insertable=false)
 	private Long id;
 	
-	@NotNull
 	@OneToOne
 	@JoinColumn(name="HALL_ID")
 	private Hall hall;
@@ -37,22 +45,18 @@ public class Term {
 	@JoinColumn(name="PROJECTION_ID")
 	private Projection projection;
 	
-	@NotNull
-	@Column(name = "SEATMAP", columnDefinition = "varbinary(max)")
+//	binary nije dovoljno velik inicijalno
+	@Column(name = "SEATMAP", columnDefinition = "LONGBLOB"/* , columnDefinition = "varbinary(max)"*/)
 	private byte[] seats;
 	
 	@Transient
 	private SeatMap seatMap;
 	
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern="mm.dd.yyyy") 
 	@Column(name="TERM_DATE")
-	private Date termDate;
+	private String termDate;
 	
-	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern="hh:mm") 
 	@Column(name="TERM_TIME")
-	private Date termTime;
+	private String termTime;
 
 	@NotNull
 	@Column(name = "TERM_PR_REGULAR", nullable = false)
@@ -100,20 +104,24 @@ public class Term {
 		this.seatMap = seatMap;
 	}
 
-	public Date getTermDate() {
+	public String getTermDate() {
 		return termDate;
 	}
 
-	public void setTermDate(Date termDate) {
+	public void setTermDate(String termDate) {
 		this.termDate = termDate;
 	}
 
-	public Date getTermTime() {
+	public String getTermTime() {
 		return termTime;
 	}
 
-	public void setTermTime(Date termTime) {
+	public void setTermTime(String termTime) {
 		this.termTime = termTime;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public int getPriceRegular() {

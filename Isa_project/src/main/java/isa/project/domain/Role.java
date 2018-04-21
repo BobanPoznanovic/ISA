@@ -1,5 +1,6 @@
 package isa.project.domain;
 
+import javax.persistence.Entity;
 
 //@Entity(name="Role")
 public enum Role {

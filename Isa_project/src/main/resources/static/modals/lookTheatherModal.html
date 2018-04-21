@@ -1,0 +1,56 @@
+<!-- Modal -->
+ <div class="modal fade" id="lookTheaterModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog custom-class">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Theater projection</h4>
+      </div>
+      <div class="modal-body" ng-model="allThProjections">
+      {{theaters}}
+        	<table class="table" >
+	 	<thead>
+			<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
+	      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+	   			</a>
+	   		</th>
+	   		
+			<th><a href="#/homePage" ng-click="sortType = 'genre'; sortReverse =! sortReverse" >
+	      			<span ng-show="sortType == 'genre' && !sortReverse"></span>Genre <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+	   			</a>
+	   		</th>
+	   		
+	   		<th><a href="#/homePage" ng-click="sortType = 'director'; sortReverse =! sortReverse">
+	   			<span ng-show="sortType == 'director' && !sortReverse"></span>Director <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+	   			</a>
+	   		</th>
+	   		
+	   		<th><a href="#/homePage" ng-click="sortType = 'actors'; sortReverse =! sortReverse">
+	   			<span ng-show="sortType == 'actors' && !sortReverse"></span>Actors <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+	   			</a>
+	   		</th>
+		</thead> 
+		<tbody>
+			<tr ng-repeat="result in thProjections">
+				<td>{{result.name}}</td>
+				<td>{{result.genre}}</td>
+				<td>{{result.director}}</td>
+				<td>{{result.actors}}</td>
+				<td>{{result.duration}}</td>
+				<td>{{result}}
+				{{theaters}}
+					<div><button type="button" class="btn btn-default">Look</button></div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-model="$parent.allThPRojections"> {{$parent.allThProjections.name}}Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+

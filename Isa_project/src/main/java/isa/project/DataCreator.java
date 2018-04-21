@@ -40,10 +40,14 @@ public class DataCreator {
 		SeatMap seatMap = new SeatMap(5, 5);
 		boolean[][] seats = new boolean[5][5];
 		SeatType[][] seatTypes = new SeatType[5][5];
-		for(int i=0;i<5;i++) {
-			for(int j=0;j<5;j++) {
+		
+		for(int i=0;i<5;i++) 
+		{
+			for(int j=0;j<5;j++) 
+			{
 				seats[i][j]=true;
-				if(i<2) {
+				if(i<1) 
+				{
 					seatTypes[i][j]=SeatType.BALCONY;
 				}
 				else {
@@ -51,9 +55,11 @@ public class DataCreator {
 				}
 			}
 		}
+		
 		seatMap.setFreeSeats(seats);
 		seatMap.setSeatTypes(seatTypes);
 		byte[] byteMap = null;
+		
 		try {
 			byteMap = SeatMap.convertToBytes(seatMap);
 		} catch (IOException e) {
@@ -63,24 +69,24 @@ public class DataCreator {
 		
 		Hall hall = new Hall();
 		hall.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
-		hall.setColumns(5);
-		hall.setRows(5);
+		hall.setColumns(2);
+		hall.setRows(2);
 		hall.setName("A1");
 		hall.setSeats(byteMap);
 		hallService.createNewHall(hall);
 		
 		Hall hall1 = new Hall();
 		hall.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
-		hall.setColumns(5);
-		hall.setRows(5);
+		hall.setColumns(2);
+		hall.setRows(2);
 		hall.setName("A2");
 		hall.setSeats(byteMap);
 		hallService.createNewHall(hall1);
 		
 		Hall hall2 = new Hall();
 		hall.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
-		hall.setColumns(5);
-		hall.setRows(5);
+		hall.setColumns(2);
+		hall.setRows(2);
 		hall.setName("B1");
 		hall.setSeats(byteMap);
 		hallService.createNewHall(hall2);

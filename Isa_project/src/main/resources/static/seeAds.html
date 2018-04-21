@@ -1,0 +1,26 @@
+
+
+<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>price</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="ad in ads"
+				ng-click="setSelected(ad)"
+				ng-class="{'info' : selected===ad}">
+					<td>{{ad.name}}</td>
+					<td>{{ad.description}}</td>
+					<td>{{ad.price}}</td>
+					<td><button type="button" class="btn btn-primary" ng-click="$parent.giveOffer()">Daj ponudu</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+</div>

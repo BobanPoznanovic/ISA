@@ -22,6 +22,14 @@ public class Hall {
 	@NotNull
 	@Column(name = "HALL_NAME")
 	private String name;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	@NotNull
 	@OneToOne
@@ -36,8 +44,7 @@ public class Hall {
 	@Column(name = "HALL_COLUMNS", nullable = false)
 	private int columns;
 	
-	@NotNull
-	@Column(name = "TERM_SEATMAP", columnDefinition = "varbinary(max)")
+	@Column(name = "TERM_SEATMAP", columnDefinition = "LONGBLOB"/*, columnDefinition = "varbinary(max)"*/)
 	private byte[] seats;
 	
 	@Transient
@@ -63,16 +70,16 @@ public class Hall {
 		return columns;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void setColumns(int columns) {
 		this.columns = columns;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public byte[] getSeats() {

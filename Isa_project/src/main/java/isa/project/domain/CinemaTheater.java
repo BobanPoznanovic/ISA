@@ -21,17 +21,25 @@ public class CinemaTheater {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
+	
 	@Column(name="tip", unique=false, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private enumProjection type;
+	
 	@Column(name="name", unique=false, nullable=false)
 	private String name;
+	
 	@Column(name="adress", unique=false, nullable=false)
 	private String adress;
+	
 	@Column(name="description", unique=false, nullable=false)
 	private String description;
+	
 	@Column(name="rating", unique=false, nullable=false)
 	private float rating;
+	
+	@Column(name="city", unique=false, nullable= false)
+	private String city;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cinemaTheater", cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -40,7 +48,7 @@ public class CinemaTheater {
 	public CinemaTheater() {
 		super();
 	}
-	public CinemaTheater(enumProjection type, String name, String adress, String description,
+	public CinemaTheater(enumProjection type, String name, String adress, String description, String city,
 			float rating) {
 		super();
 		this.type = type;
@@ -48,6 +56,7 @@ public class CinemaTheater {
 		this.adress = adress;
 		this.description = description;
 		this.rating = rating;
+		this.city = city;
 	}
 	public Long getId() {
 		return id;
@@ -92,7 +101,12 @@ public class CinemaTheater {
 		this.cinemaTheaterAdmin = cinemaTheaterAdmin;
 	}
 
-	
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
 	
 }
 

@@ -20,6 +20,10 @@ public class SeatMap implements Serializable {
 	
 	private SeatType[][] seatTypes;
 	
+	public SeatMap() {
+		super();
+	}
+
 	public SeatMap(int rows, int cols) {
 		super();
 		this.freeSeats = new boolean[rows][cols];
@@ -49,11 +53,11 @@ public class SeatMap implements Serializable {
 	        return bos.toByteArray();
 	    } 
 	}
-
-	public static Object convertToSeatMap(byte[] bytes) throws IOException, ClassNotFoundException {
+// inicijalno je bilo da je return type Object
+	public static SeatMap convertToSeatMap(byte[] bytes) throws IOException, ClassNotFoundException {
 	    try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 	         ObjectInput in = new ObjectInputStream(bis)) {
-	        return in.readObject();
+	        return (SeatMap) in.readObject();
 	    } 
 	}
 	

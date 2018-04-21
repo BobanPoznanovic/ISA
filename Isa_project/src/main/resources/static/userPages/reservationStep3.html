@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="bootstrap/seatStyle.css">
+<div class="col-sm-4 col-sm-offset-1" >
+	<p class="text-center">reservation step 3</p>
+	<form name="reserveStep3Form" role="form" action="" method="post" class="r-form">
+			<div class="form-group">
+				<label for="reserve-form"><p>Hall:</p></label>
+				<select class="form-control" name="hall" id="hall" ng-model="halls.id"style="padding: 1px 3px;" ng-change="getRowsColumns()" ng-init="getTakenSeats()" required> <!--ng-init="getRowsColumns()"  -->
+					<option value="" selected hidden>-- Select an option --</option>
+					<option ng-repeat="hall in halls" value={{hall.id}}>{{hall.name}}</option>
+					<div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+				</select>
+			</div>
+			  <div>
+			  	<label for="reserve-form"><p>Choose seats:</p></label>
+				 <span ng-repeat="row in matrix track by $index" ><br>
+				     <span ng-repeat="element in row track by $index">
+				     	 <input type="checkbox" ng-model="matrix[$parent.$index][$index]" rows="1" cols="1" ng-true-value="false" ng-false-value="true" ng-disabled="!renderMatrix[$parent.$index][$index]" ng-change="showChanged()"> <!-- ng-disabled="shouldDisable($parent.$index,$index)" -->   
+				 	 </span>
+				  </span>
+			  </div>  
+			 <!--  <label for="reserve-form"><p>Choose seats:</p></label>
+				<table>
+					<tr><td></td><td ng-repeat="column in columns">{{ column.title }}</td></tr>
+				    <tr ng-repeat="row in rows">
+				    	<td>{{row.title}}</td>
+				        <td>
+				            <span ng-repeat="row in matrix track by $index"><br>
+						      <span ng-repeat="element in row track by $index">
+						        <input type="checkbox" ng-model="matrix[$parent.$index][$index]" rows="1" cols="1" ng-true-value="false" ng-false-value="true" ng-change="showChanged()">  
+						 	 	
+						 	 </span>
+						  </span>
+				        </td>
+				    </tr>
+				</table>
+			</div>  -->
+			
+			<!-- <div class="form-group">
+			<label for="reserve-form"><p>Choose seats:</p></label>
+				<table>
+					 <tr ng-repeat="row in data">
+        				<td ng-repeat="cell in row track by $index"><input ng-model="row[$index]" type="checkbox"/></td>
+      				</tr>
+				
+					<tr><td></td><td ng-repeat="column in columns">{{ column.title }}</td></tr>
+				    <tr ng-repeat="row in rows">
+				    	<td>{{row.title}}</td>
+				        <td ng-repeat="column in columns">
+				            <input type="checkbox" ng-model="row[$index]">
+				  			<label for="">{{column.title}}</label>
+				        </td>
+				    </tr>
+				</table>
+			</div> -->
+			<!-- <div class="form-group">
+			
+			<div class="checkbox" ng-repeat="nereg in rows track by $index" ng-click="nereg.selected = !nereg.selected">
+			  	<input type="checkbox" ng-checked="nereg.selected" >
+			  	<label for="">{{nereg.title}}</label>
+			</div>
+			<div class="checkbox-inline" ng-repeat="nereg in columns track by $index" ng-click="nereg.selected = !nereg.selected">
+			  	  <span><input type="checkbox" ng-checked="nereg.selected" >
+			  	<label for="">{{nereg.title}}</label></span>
+			</div>
+    		</div> -->
+		<!-- <div class="form-group" ng-init="getRowsColumns()">
+				<li ng-repeat="row in rows">
+					<input type="checkbox" />
+				</li>
+		</div> -->
+    <!-- <div class="container" >ng-controller="waiterController">
+	<h1>Tables in segments</h1>
+	<div ng-repeat="row in rows"'>
+		<div ng-repeat="col in columns">
+			<input type="checkbox">ng-init="getRowsColumns(date.hall.id)"
+		</div>
+	</div>
+</div>   -->
+		<div>
+	 	    <a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="previousStep()">Previous</button></a>
+		  	<a href="#/homePage"><button ng-disabled="reserveStep3Form.$invalid" type="submit" class="btn btn-default" ng-click="nextStep(); getFriends()">Next</button></a><!--  -->
+		</div>
+	</form><!-- ; searchFriendship() -->
+	<!-- <div ng-if="lastSearch == 'cinemas'" ng-include="'userPages/cinemasTable.html'"></div> -->
+</div>

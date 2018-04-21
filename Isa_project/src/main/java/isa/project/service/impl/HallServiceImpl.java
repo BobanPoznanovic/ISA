@@ -52,7 +52,7 @@ public class HallServiceImpl implements HallService{
 	@Override
 	public List<Hall> findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		return hallRepository.findAll();
 	}
 }
 

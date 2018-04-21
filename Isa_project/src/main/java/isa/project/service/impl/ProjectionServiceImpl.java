@@ -2,19 +2,18 @@ package isa.project.service.impl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import isa.project.domain.CinemaTheater;
 import isa.project.domain.Projection;
 import isa.project.repositories.ProjectionRepository;
 import isa.project.service.ProjectionService;
 
-@Service
 @Transactional
-public class ProjectionServiceImpl implements ProjectionService{
+@Service
+public class ProjectionServiceImpl implements ProjectionService {
 
 	@Autowired
 	private ProjectionRepository projectionRepository;
@@ -26,15 +25,21 @@ public class ProjectionServiceImpl implements ProjectionService{
 	}
 
 	@Override
-	public List<Projection> findAll(CinemaTheater cinemaTheater) {
+	public List<Projection> findAll() {
 		// TODO Auto-generated method stub
-		return projectionRepository.findAll(cinemaTheater);
+		return projectionRepository.findAll();
 	}
 
 	@Override
-	public Projection createNewProjection(Projection projection) {
+	public Projection save(Projection projection) {
 		// TODO Auto-generated method stub
-		return  projectionRepository.save(projection);
+		return projectionRepository.save(projection);
+	}
+
+	@Override
+	public List<Projection> save(List<Projection> projection) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -44,9 +49,21 @@ public class ProjectionServiceImpl implements ProjectionService{
 	}
 
 	@Override
-	public Projection update(Long id) {
+	public void delete(List<Long> ids) {
 		// TODO Auto-generated method stub
-		return null;
+		
+	}
+
+	@Override
+	public List<Projection> findByName(String name) {
+		// TODO Auto-generated method stub
+		return projectionRepository.findByName(name);
+	}
+
+	@Override
+	public List<Projection> findById(CinemaTheater ct) {
+		// TODO Auto-generated method stub
+		return projectionRepository.findById(ct.getId());
 	}
 	
 }

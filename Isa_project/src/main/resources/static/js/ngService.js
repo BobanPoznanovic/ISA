@@ -19,8 +19,15 @@ isaApp.config(function($routeProvider) {
     })
     .when("/cinemas",{
     	templateUrl : "Cinemas.html"
+    		
     }).when("/funZone",{
     	templateUrl : "funZone.html"
+    		
+    }).when("/confirmReservation", {
+    	templateUrl : "confirmReservation.html"
+    		
+    }).when("/cancel", {
+        templateUrl : "cancelReservation.html"
     })
 });
 
@@ -51,6 +58,13 @@ isaApp.factory('isaService', function isaService($http){
 		var data = {email : email};
 		var config = {};
 		return $http.put("user/confirmRegistration/" + email, config);
+	}
+	
+	isaService.confirmReservation = function(id)
+	{
+		var data = {id : id};
+		var config = {};
+		return $http.put("reservation/confirmReservation/" + id, config);
 	}
 	
 	isaService.getAllEmails = function()
@@ -136,9 +150,235 @@ isaApp.factory('isaService', function isaService($http){
 		return $http.delete("friendship/deleteFriendship/" + senderId);
 	}
 	
+	isaService.cancelReservation = function(id)
+	{
+		return $http.delete("reservation/cancelReservation/" + id);
+	}
+
+	isaService.cancelReservationEmail = function(id)
+	{
+		var data = {id : id};
+		var config = {};
+		return $http.put("reservation/cancel/" + id, config);
+	}
+	
 	isaService.logout = function()
 	{
 		return $http.get("user/logout");
+	}
+	
+	isaService.searchCinemas = function(cinema)
+	{
+		var name = "";
+		var adress = "";
+//		var city = "";
+		
+		if(cinema === undefined)
+		{
+			name = "";
+			adress = "";
+			city = "";
+			
+		}else{
+			
+			if(cinema.name == null || cinema.name == undefined || cinema.name == "")
+				name = " ";
+			else
+				name = cinema.name;
+			if(cinema.adress == null || cinema.adress == undefined || cinema.adress == "")
+				adress = " ";
+			else
+				adress = cinema.adress;
+//			if(cinema.city == null || cinema.city == undefined || cinema.city == "")
+//				city = " ";
+//			else
+//				city = cinema.city;
+		}
+		
+		var config = 
+		{
+				params:
+				{
+					name: name,
+					adress: adress
+//					city: city
+				}
+		};
+		
+		return $http.get("isa/cinemaTheater/searchCinemas", config);
+	}
+	
+	isaService.searchTheaters = function(theater)
+	{
+		var name = "";
+		var adress = "";
+//		var city = "";
+		
+		if(theater === undefined)
+		{
+			name = "";
+			adress = "";
+			
+		}else{
+			
+			if(theater.name == null || theater.name == undefined || theater.name == "")
+				name = " ";
+			else
+				name = theater.name;
+			if(theater.adress == null || theater.adress == undefined || theater.adress == "")
+				adress = " ";
+			else
+				adress = theater.adress;
+		}
+		
+		var config = 
+		{
+				params:
+				{
+					name: name,
+					adress: adress
+//					city: city
+				}
+		};
+		
+		return $http.get("isa/cinemaTheater/searchTheaters", config);
+	}
+	
+	isaService.getCinemas = function() {
+		return $http({
+			method : 'GET',
+			url : 'isa/cinemaTheater/getCinemas'
+		});
+	}
+	
+	isaService.getTheaters = function() {
+		return $http({
+			method : 'GET',
+			url : 'isa/cinemaTheater/getTheaters'
+		});
+	}
+	
+	isaService.getProjections = function(id) {
+		var config = 
+		{
+				params:
+				{
+					id: id
+				}
+		};
+		return $http.get("projection/getProjections", config);
+	}
+	
+	isaService.getDates = function(id)
+	{
+		var config = 
+		{
+				params:
+				{
+					id: id
+				}
+		};
+		return $http.get("term/getDates", config);
+	}
+	
+	isaService.getTerms = function(projectionId, date)
+	{
+		console.log('servic');
+		var config = 
+		{
+				params:
+				{
+					projectionId: projectionId,
+					termDate: date
+				}
+		};
+		return $http.get("term/getTerms", config);
+	}
+
+	isaService.getTimes = function(projectionId, date)
+	{
+		var config = 
+		{
+				params:
+				{
+					projectionId: projectionId,
+					termDate: date
+				}
+		};
+		return $http.get("term/getTimes", config);
+	}
+	
+	isaService.getHalls = function(projectionId, date, time)
+	{
+		var config = 
+		{
+				params:
+				{
+					projectionId: projectionId,
+					termDate: date,
+					termTime: time
+				}
+		};
+		return $http.get("term/getHalls", config);
+	}
+	
+	isaService.getRowsColumns = function(hallId){
+		var config = 
+		{
+				params:
+				{
+					id: hallId
+				}
+		};
+		return $http.get("hall/getRowsColumns", config);
+	}
+	
+	isaService.getSeats = function(pr, date, time, hall)
+	{
+		var config = 
+		{
+				params:
+				{
+					projId: pr,
+					termDate: date,
+					termTime: time,
+					hallId: hall
+				}
+		};
+		return $http.get("term/getSeats", config);
+	}
+	
+	isaService.makeReservation = function(reservation)
+	{
+		var config = {};
+		return $http.put("reservation/reserve", reservation, config);
+	}
+	
+	isaService.getProjectionsName = function(id)
+	{
+		console.log(id);
+		var config = {
+				params: {id :id}
+		};
+		return $http.get("projection/getNames", config);
+	}
+	
+	isaService.getReservations = function()
+	{
+		var config = {};
+		return $http.get("reservation/getReservations", config);
+	}
+	
+	/*isaService.getUsersNames = function(friends)
+	{
+		var config = {};
+		return $http.get("user/getNames", friends, config);
+	}*/
+	
+	isaService.getWatchedReservations = function()
+	{
+		var config = {};
+		return $http.get("reservation/getWatchedReservations", config);
 	}
 	
 	return isaService;

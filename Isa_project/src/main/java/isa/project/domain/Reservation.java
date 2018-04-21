@@ -56,11 +56,6 @@ public class Reservation {
 	
 	@Column(name = "PROJECTION_RATING")
 	private int projectionRating;
-
-	@NotNull
-	@Column(name = "STATUS")
-	@Enumerated(EnumType.STRING)
-	private ReservationStatus reservationStatus;
 	
 	public Date getTimeOfReservation() {
 		return timeOfReservation;
@@ -69,7 +64,20 @@ public class Reservation {
 	public void setTimeOfReservation(Date timeOfReservation) {
 		this.timeOfReservation = timeOfReservation;
 	}
+
+	@NotNull
+	@Column(name = "STATUS")
+	@Enumerated(EnumType.STRING)
+	private ReservationStatus reservationStatus;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public ReservationStatus getReservationStatus() {
 		return reservationStatus;
 	}

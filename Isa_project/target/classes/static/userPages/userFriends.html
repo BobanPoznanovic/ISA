@@ -1,13 +1,13 @@
 <div class="tab">
-  <button class="tablinks btn btn-large" ng-click="showTab(0)">SEARCH FOR FRIENDS</button>
-  <button class="tablinks btn btn-large" ng-click="showTab(1); getFriendsList()">FRIENDS LIST</button>
-  <button class="tablinks btn btn-large" ng-click="showTab(2); friendRequests()">FRIEND REQUESTS</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(0)">SEARCH FOR FRIENDS</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(1); getFriendsList()">FRIENDS LIST</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(2); friendRequests()">FRIEND REQUESTS</button>
 </div>
 
 	  <div ng-show="tabView == 2">
 	  <p class="text-center">friend requests</p>
 	  <p class="text-center" ng-if="noRequest">No friend requests </p>
-          <table class="table">
+          <table class="table table-hover" style="width:100%;">
 				<tbody>
 				<!-- |orderBy:orderByField:reverseSort" -->
 					<tr ng-if="status != 'accepted'" ng-repeat="result in friendRequest | orderBy:sortType:sortReverse" ng-click="setSelected(result)"
@@ -25,7 +25,7 @@
   
       <div ng-show="tabView == 1" ng-init="getFriendsList()">
          <p class="text-center">friends list</p>
-          <table class="table">
+          <table class="table table-hover" style="width:100%;">
 	          <thead>
 					<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
 			      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>

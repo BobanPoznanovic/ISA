@@ -11,14 +11,11 @@ import org.springframework.stereotype.Repository;
 
 import isa.project.domain.CinemaTheater;
 import isa.project.domain.Hall;
-import isa.project.domain.User;
 
 @Repository
 public interface HallRepository extends JpaRepository<Hall, Long> {
 	@SuppressWarnings("unchecked")
 	public Hall save(Hall Hall);
-	
-	public Hall findOne(Long id);
 	
 	@Query("SELECT h FROM Hall h WHERE h.cinemaTheater = :cinemaTheater")
 	public List<Hall> findAll(CinemaTheater cinemaTheater);

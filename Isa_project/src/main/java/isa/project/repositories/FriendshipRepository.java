@@ -14,9 +14,9 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long>{
 	@SuppressWarnings("unchecked")
 	public Friendship save(Friendship friendship);
 	
-	public List<Friendship> findAll();
+//	public List<Friendship> findAll();
 	
-	public Friendship findOne(Long id);
+//	public Friendship findOne(Long id);
 	
 	public List<Friendship> findBysender(User id);
 	

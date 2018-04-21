@@ -1,4 +1,4 @@
-var isaApp = angular.module('isaApp');
+	var isaApp = angular.module('isaApp');
 
 
 var passwordVerify = function() {
@@ -45,9 +45,31 @@ isaApp.directive('emailAvailable', ['isaService', function(isaService) {
         }
     };
 }]);
-	          
+	    
 
 isaApp.directive("passwordVerify", passwordVerify);
+
+isaApp.controller('ReservationController', ['$rootScope','$scope','$routeParams','$location','isaService', '$q', function RegistrationController($rootScope,$scope,$routeParams,$location,isaService){
+	
+	$scope.confirmReservation = function()
+	{
+		 var id = $routeParams.id;
+		 
+		 isaService.confirmReservation(id).then(function(response)
+		 {
+		 });
+	}
+	
+	$scope.cancelReservationEmail = function()
+	{
+		 var id = $routeParams.id;
+		 
+		 isaService.cancelReservationEmail(id).then(function(response)
+		 {
+		 });
+	}
+	
+}]);
 
 isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams','$location','isaService', '$q', function RegistrationController($rootScope,$scope,$routeParams,$location,isaService){
 	
@@ -71,7 +93,6 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
     {
     	if(password != $scope.passwordc)
     	{
-    		console.log(password);
     		$scope.registrationForm.passwordc.$error;
     	}
     }
@@ -100,7 +121,6 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
 	$scope.confirmRegistration = function()
 	{
 		 var email = $routeParams.email;
-		 console.log(email);
 		 
 		 isaService.confirmRegistration(email).then(function(response)
 		 {
@@ -110,7 +130,6 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
 			 else
 				 confirmed = false;*/
 		 });
-		 console.log('vratio ');
 	}
 	
 	$scope.verifyDuplicate = function(email)
@@ -118,7 +137,6 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
 		isaService.getAllEmails().then(function(response)
 		{
 			var allEmail = response.data;
-			console.log('1' +$scope.duplicate);
 			for(var i = 0; i < allEmail.length; i++)
 			{
 				if(allEmail[i].email.match(email))
@@ -166,7 +184,6 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
 		},
 		function(data) {
 	        // Handle error here
-			console.log("u erroru asm");
 			alert("Invalid password");
 			$location.path("/login");
 		});
@@ -174,13 +191,37 @@ isaApp.controller('RegistrationController', ['$rootScope','$scope','$routeParams
 	
 }]);
 
-isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$location','isaService', '$q', function HomePageController($rootScope,$scope,$routeParams,$location,isaService){
+isaApp.directive('starRating', function () {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star">' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '='
+        },
+        link: function (scope, elem, attrs) {
+            scope.stars = [];
+            for (var i = 0; i < scope.max; i++) {
+                scope.stars.push({
+                    filled: i < scope.ratingValue
+                });
+            }
+        }
+    }
+});
 
+
+isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$location','isaService','$q', function HomePageController($rootScope,$scope,$routeParams,$location,isaService){
+
+//	LOGIN AND LOGOUT	
 	isaService.getLoggedInUser().then(function(response)
 	{ 
 		$rootScope.loggedIn = response.data;
 		$scope.loggedIn = response.data;
-//		console.log($rootScope.loggedIn);
 		$scope.editUser = $scope.loggedIn;		// da bi inicijalno ispisao podatke u settings
 		$scope.editUser.password = "";
 		
@@ -190,6 +231,21 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 	}, function myError(response) {
 		$location.path("/login");
     });
+	
+	
+	isaService.getWatchedReservations().then(function(response)
+	{
+		$scope.watchedReservations = response.data;
+	});
+		
+	
+	$scope.logout = function()
+	{
+		isaService.logout().then(function(response)
+		{
+			$location.path("/");
+		});
+	}
 	
 //	$scope.getLoggedIn = function()
 //	{
@@ -216,7 +272,7 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 		isaService.searchForFriends(friend).then(function(response)
 		{
 			$scope.friends = response.data;
-//			console.log($scope.friends);
+			console.log($scope.friends);
 			
 		});
 		$scope.lastSearch = "friends";
@@ -228,9 +284,13 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 		isaService.searchFriendship().then(function(response)
 		{
 			var nasao = false;
-			
 			if(result.id != undefined)
 			{	
+				if(response.data.length == 0)
+				{
+					result.Action = 'notSent';
+				}
+				
 				if(!nasao)
 				for(var i = 0; i < response.data.length; i++)
 				{
@@ -269,9 +329,9 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 						result.Action = 'notSent';
 					}
 				}
-				
 			}
 		},
+		
 		function(data) {
 			console.log("vec postoji friendship");
 		});
@@ -298,15 +358,43 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 	}
 	
 	$scope.numberView = 0;		// inicijalno na home
+	$scope.reserveTypes = [];
 	$scope.show = function(num)
 	{
 		$scope.numberView = num;
 		$scope.lastSearch = "";
+		$scope.step = 0;
+		
 		if($scope.numberView == 3)
 			$scope.tabView = 0;
+		
+		if($scope.numberView == 4)
+		{	
+			$scope.tabView = 3;
+			$scope.reserveTypes = [{
+			    value: 'cinema',
+			    label: 'cinema'
+			  },{
+				  value: 'theater',
+				  label: 'theater'
+			  }];
+		if($scope.tabView == 4)
+			$scope.step = 1;
+		}
+		
+		if($scope.tabView != 4)
+		{
+			$scope.all = {};
+			$scope.allProjections = {};
+			$scope.dates = {};
+			$scope.times = {};
+			$scope.halls = {};
+			$scope.invitedFriends = [];
+			
+		}
 	}
-	
-	
+
+//	VALIDATION
 	$scope.verifyDuplicate = function(email)
 	{
 		isaService.getAllEmails().then(function(response)
@@ -332,7 +420,8 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 		else if(password == passwordCheck)
 			$scope.noMatch = false;
 	}
-	
+//	VALIDATION
+
 	$scope.requestSent = false;
 	$scope.sendRequest = function(reciever)
 	{
@@ -340,8 +429,8 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 		isaService.sendRequest(reciever).then(function(response)
 		{
 			$scope.sent = response.data;	
-			
 		},
+		
 		function(data) {
 	        // Handle error here
 			console.log("vec postoji friendship");
@@ -351,9 +440,16 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 	$scope.clickFunc = function(item)
 	{
 		  item.Action = "sent";
+		  console.log(item.Action);
 	}
 	
-	$scope.setSelected = function(selected) {
+	$scope.clickFuncConfirm = function(item)
+	{
+		  item.Action = "friends";
+	}
+	
+	$scope.setSelected = function(selected) 
+	{
 		$scope.selected = selected;
 	}
 	
@@ -362,6 +458,20 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 	{
 		$scope.tabView = num;
 		$scope.lastSearch = "";
+		
+		if($scope.tabView == 4)
+			$scope.step = 1;
+		
+		if($scope.tabView != 4)
+		{
+			$scope.all = {};
+			$scope.allProjections = {};
+			$scope.dates = {};
+			$scope.times = {};
+			$scope.halls = {};
+			$scope.invitedFriends = [];
+			
+		}
 	}
 	
 	$scope.friendRequests = function(){
@@ -376,7 +486,6 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 				$scope.noRequest = true;
 		});
 	}
-	
 		
 	$scope.confirmRequest = function(sender)
 	{
@@ -386,7 +495,7 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 			if(response.data.status == "ACCEPTED")
 			{	$scope.status = "accepted";
 				alert("Friend request accepted");
-				$scope.friendRequest.splice($scope.friendRequest.indexOf(sender), 1);
+//				$scope.friendRequest.splice($scope.friendRequest.indexOf(sender), 1);
 //				$scope.friends.splice($scope.friends.indexOf(sender), 1);
 				sender.Action = 'friends'
 //				$scope.tabView = 1;
@@ -394,36 +503,389 @@ isaApp.controller('HomePageController', ['$rootScope','$scope','$routeParams','$
 		});
 	}
 	
+	
 	$scope.getFriendsList = function()
 	{
 		isaService.getFriendsList().then(function(response)
 		{
-			$scope.friendsList = response.data;
-			for(var i = 0; i < response.data.length; i++)
-			{
-				$scope.friendsList = response.data.sort();
-			}
-			
+			$scope.friendsList = response.data.sort();
 		});
+		
 	}
+	
 	
 	$scope.deleteFriendship = function(friend)
 	{
 		isaService.deleteFriendship(friend.id).then(function(response)
 		{
 			$scope.friendsList.splice($scope.friendsList.indexOf(friend), 1);
-			$scope.friendRequest.splice($scope.friendRequest.indexOf(friend), 1);
+//			$scope.friendRequest.splice($scope.friendRequest.indexOf(friend), 1);
 //			$scope.friends.splice($scope.friends.indexOf(friend), 1);
 			friend.Action = 'notSent';
 		});
 	}
 	
-	$scope.logout = function()
+	
+	
+//	SEARCH
+	$scope.searchCinemas = function(cinema)
 	{
-		isaService.logout().then(function(response)
+		isaService.searchCinemas(cinema).then(function(response)
 		{
-			$location.path("/");
+			$scope.cinemas = response.data.sort();
+			
+			for(var i = 0; i < $scope.cinemas.length; i++)
+			{
+				$scope.ratings = [{
+			        current: $scope.cinemas[i].rating,
+			        max: 5
+			    
+			    }];
+			}
+			
+		});
+		
+		$scope.lastSearch = "cinemas";
+	}
+	
+	$scope.searchTheatres = function(theater)
+	{
+		isaService.searchTheaters(theater).then(function(response)
+		{
+			$scope.theaters = response.data.sort();
+			console.log($scope.theaters);
+		});
+		console.log($scope.theaters);
+		/*isaService.getProjections($scope.theaters.id).then(function(response)
+		{
+			$scope.allProjections = response.data.sort();
+			console.log($scope.allProjections);
+		});*/
+		
+		$scope.lastSearch = "theaters";
+	}
+	$scope.reserve = function(cinema)
+	{
+		console.log($scope.numberView);
+		$scope.numberView = 4;
+		$scope.lastSearch = "reservation";
+		$scope.step = 1;
+	}
+	
+//	RESERVATION
+	
+	$scope.step = 0;
+	var i = 1;
+	$scope.nextStep = function() 
+	{
+		$scope.step = ++$scope.step;
+	}
+	
+	$scope.previousStep = function()
+	{
+		$scope.step = --$scope.step;
+	}
+	
+	resetValues = function()
+	{
+		console.log($scope.dates);
+		console.log('u reset');
+		$scope.dates = {};
+		console.log($scope.dates);
+		$scope.times = {};
+		$scope.halls = {};
+	}
+	
+	$scope.typeChanged = function()
+	{
+		if($scope.reserveTypes.value == 'cinema')
+		{
+			isaService.getCinemas().then(function(response)
+			{
+				$scope.all = response.data.sort();
+			});
+			
+		}else if($scope.reserveTypes.value == 'theater')
+		{	
+			isaService.getTheaters().then(function(response)
+			{
+				$scope.all = response.data.sort();
+			});
+		}
+	}
+	
+	$scope.getProjections = function(id)
+	{
+		isaService.getProjections(id).then(function(response)
+		{
+			$scope.allProjections = response.data.sort();
+			console.log($scope.allProjections);
 		});
 	}
 	
+
+	$scope.searchProj = function(th)
+	{
+		console.log(th);
+		isaService.getProjections(th.id).then(function(response)
+		{
+			$scope.thProjections = response.data.sort();
+			console.log($scope.thProjections);
+		});
+		$scope.showModal = true;
+		$scope.lastSearch = "projections";
+		console.log($scope.lastSearch);
+	}
+	
+	
+	$scope.ctNameChanged = function()
+	{
+		isaService.getProjections($scope.all.id).then(function(response)
+		{
+			$scope.allProjections = response.data.sort();
+		});
+		
+//		resetValues();
+		$scope.dates = {};
+		$scope.times = {};
+		$scope.halls = {};
+	}
+	
+	$scope.projectionChanged = function()
+	{
+		console.log($scope.allProjections.id);
+		
+		isaService.getDates($scope.allProjections.id).then(function(response)
+		{
+				$scope.dates = response.data;
+		});
+		
+		$scope.times = {};
+		$scope.halls = {};
+		
+	}
+	
+	$scope.dateChanged = function()
+	{
+		console.log($scope.dates.id);
+		
+		$scope.times = [];
+		$scope.halls = [];
+		$scope.selTime = {};
+		var number = 0;
+		
+		isaService.getTimes($scope.allProjections.id, $scope.dates.id).then(function(response)
+		{
+			$scope.times= response.data;
+		});
+		
+		$scope.halls = {};
+	}
+	
+	$scope.timeChanged = function()
+	{
+		isaService.getHalls($scope.allProjections.id, $scope.dates.id, $scope.times.id).then(function(response)
+		{
+			$scope.halls = response.data.sort();
+			console.log($scope.halls);
+		});
+	}
+	
+	$scope.getRowsColumns = function()
+	{
+		$scope.rows = [];
+		$scope.columns = [];
+		
+		isaService.getRowsColumns($scope.halls.id).then(function(response)
+		{
+			$scope.seatNumber = 0;
+			$scope.rowsLength = parseInt(response.data[0]);
+			$scope.columnsLength = parseInt(response.data[1]);
+			
+			var i = 0;
+			
+			for(var i = 0; i < $scope.rowsLength; i++)
+			{
+				newItem = {title: i + 1, selected: false};
+				$scope.rows.push(newItem);
+			}
+			
+			for(var i = 0; i < $scope.columnsLength; i++)
+			{	
+				$scope.seatNumber++;
+				newItem = {title: i + 1, selected: false};
+				$scope.columns.push(newItem);
+			}
+		});
+		
+		$scope.matrix = {};
+		$scope.itemsMap = {};
+		
+		isaService.getSeats($scope.allProjections.id, $scope.dates.id, $scope.times.id, $scope.halls.id).then(function(response)
+		{
+			$scope.seats = response.data;
+			$scope.matrix = $scope.seats.freeSeats;
+			
+		});
+		
+		$scope.getTakenSeats();
+		
+//		$scope.matrix = $scope.free;
+	}
+	
+	$scope.getTakenSeats = function()
+	{
+		isaService.getSeats($scope.allProjections.id, $scope.dates.id, $scope.times.id, $scope.halls.id).then(function(response)
+			{
+				$scope.renderMatrix = response.data.freeSeats;
+			});
+	}
+	
+	$scope.hallChanged = function()
+	{
+		$scope.matrix = {};
+		console.log($scope.matrix)
+		console.log(halls.id);
+			isaService.getSeats($scope.allProjections.id, $scope.dates.id, $scope.times.id, $scope.halls.id).then(function(response)
+			{
+				console.log('usao');
+				$scope.seats = response.data;
+				console.log($scope.seats.freeSeats);
+				$scope.matrix = $scope.seats.freeSeats;
+			 });
+	}
+	
+	
+	$scope.makeReservation = function()
+	{
+		$scope.reservation = 
+		{
+				name: $scope.all.id,
+				projection: $scope.allProjections.id,
+				date: $scope.dates.id,
+				time: $scope.times.id,
+				hall: $scope.halls.id,
+				seats: $scope.reservationMatrix,
+				friends: $scope.invitedFriends
+				
+		};
+		
+		isaService.makeReservation($scope.reservation).then(function(response)
+		{
+			console.log(response.data);
+			if(response.data == "The number of additionaly chosen seats must be equal to the number of selecte friends.")
+			{
+				alert("The number of additionaly chosen seats must be equal to the number of selected friends.");
+				$scope.invitedFriends = [];
+				
+			}else if(response.data == "One of your friends already has a reservation for this term.")
+			{
+				alert("One of your friends already has a reservation for this term.");
+				
+			}else if(response.data == "You can choose a maximum of 5 seats.")
+			{
+				alert("You can choose a maximum of 5 seats.");
+				
+			}else if(response.data == "You already have a reservation for this term.")
+			{
+				alert("You already have a reservation for this term.");
+				
+			}else if(response.data == "You have to choose at least one seat.")
+			{
+				alert("You have to choose at least one seat.");
+				
+			}else if(response.data == "Reservation has been successfuly made.")
+			{
+				alert("Reservation has been successfuly made.");
+				$location.path("/homePage");
+				
+			}else if(response.data == "Someone has already reserved those seats")
+			{
+				alert("Someone has already reserved those seats.");
+			}
+		});
+	}
+	
+	
+	$scope.showChanged = function()
+	{
+		$scope.reservationMatrix = $scope.matrix;
+	}
+
+	
+	$scope.invitedFriends = [];
+	$scope.inviteFriend = function(friend)
+	{
+		$scope.invitedFriends.push(friend);
+		console.log($scope.invitedFriends);
+	}
+	
+	
+	$scope.getValues = function()
+	{
+		isaService.getProjectionsName($scope.all.id).then(function(response)
+		{
+			$scope.projectionName = response.data;
+		});
+	}
+	
+	
+	$scope.getReservations = function()
+	{
+		isaService.getReservations().then(function(response)
+		{
+			$scope.reservationList = response.data.sort();
+		});
+	}
+	
+	
+	$scope.getFriends = function()
+	{
+		isaService.getFriendsList().then(function(response)
+		{
+			$scope.friends = response.data.sort();
+			
+			if($scope.invitedFriends.length == 0)
+			{
+				for(var i = 0; i < $scope.friends.length; i++)
+				{
+					$scope.friends[i].sent = 'notSent';
+				}
+			}else
+			{
+				for(var i = 0; i < $scope.friends.length; i++)
+				{
+					$scope.friends[i].sent = 'notSent';
+				}
+				
+				for(var i = 0; i < $scope.friends.length; i++)
+				{
+					for(var j = 0; j < $scope.invitedFriends.length; j++)
+					{
+						if($scope.friends[i].id === $scope.invitedFriends[j].id)
+							$scope.friends[i].sent = 'sent';
+							
+					}
+				}
+			}
+		});
+	}
+	
+	$scope.clickSent = function(friend)
+	{
+		friend.sent = 'sent';
+		console.log(friend.sent);
+	}
+	
+	$scope.cancelReservation = function(reservation)
+	{
+		isaService.cancelReservation(reservation.id).then(function(response)
+		{
+			$scope.reservationList.splice($scope.reservationList.indexOf(reservation), 1);
+//			$scope.friendRequest.splice($scope.friendRequest.indexOf(friend), 1);
+//			$scope.friends.splice($scope.friends.indexOf(friend), 1);
+			reservation.Action = 'notSent';
+		});
+	}
+
 }]);

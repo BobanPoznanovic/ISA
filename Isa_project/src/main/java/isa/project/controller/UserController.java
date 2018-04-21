@@ -1,13 +1,15 @@
 package isa.project.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.dialect.PostgreSQL82Dialect;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,13 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sun.mail.handlers.text_html;
-
-import isa.project.DataCreator;
+import java.text.ParseException;
 import isa.project.domain.CinemaTheater;
 import isa.project.domain.Hall;
 import isa.project.domain.Projection;
+import isa.project.domain.Reservation;
+import isa.project.domain.ReservationStatus;
 import isa.project.domain.Role;
 import isa.project.domain.SeatMap;
 import isa.project.domain.SeatType;
@@ -34,6 +35,7 @@ import isa.project.domain.User;
 import isa.project.service.CinemaTheaterService;
 import isa.project.service.HallService;
 import isa.project.service.ProjectionService;
+import isa.project.service.ReservationService;
 import isa.project.service.TermService;
 import isa.project.service.UserService;
 import isa.project.utils.PasswordStorage;
@@ -48,25 +50,41 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private HallService hallService;
-	
+	private HttpSession httpSession;	
+
 	@Autowired
-	private ProjectionService projectionService;
+	private CinemaTheaterService cinemaTheaterService;
 	
 	@Autowired
 	private TermService termService;
 	
 	@Autowired
-	private HttpSession httpSession;	
-
+	private ProjectionService projectionService;
+	
 	@Autowired
-	private CinemaTheaterService cinemaTheaterService;
-
+	private HallService hallService;
+	
+	@Autowired
+	private ReservationService reservationService;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> registerUser(@RequestBody User user){
-	
-		createData();
+		
+		SeatMap seatMap = new SeatMap(5, 5);
+		boolean[][] seats = new boolean[5][5];
+		for(int i=0;i<5;i++) {
+			for(int j=0;j<5;j++) {
+				seats[i][j]=true;
+			}
+		}
+		seatMap.setFreeSeats(seats);
+		try {
+			termService.update(new Long(1), SeatMap.convertToBytes(seatMap));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		user.setUserRole(Role.USER);
 		user.setStatus(Status.NOT_ACTIVATED);
 		user.setSalt(PasswordStorage.createSalt());
@@ -95,8 +113,6 @@ public class UserController {
 			if(cinemas.get(i).getId() == id){
 				user.setCinemaTheater(cinemas.get(i));
 				cinemas.get(i).getCinemaTheaterAdmin().add(user);
-			//	cinemaTheaterService.delete(cinemas.get(i).getId());
-			//	CinemaTheater save = cinemaTheaterService.save(cinemas.get(i));
 			}
 		}
 		user.setStatus(Status.NOT_ACTIVATED);
@@ -137,7 +153,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/getAllEmails", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllEmails", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArrayList<User>> getAllEmails()
 	{
 		ArrayList<User> allEmails = new ArrayList<>();
@@ -152,8 +168,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> login(@RequestBody User user)
-	{
+	public ResponseEntity<User> login(@RequestBody User user) throws java.text.ParseException
+	{ 
 		List<User> users = userService.findAll();
 		User logged = new User();
 		
@@ -176,6 +192,34 @@ public class UserController {
 				{
 					logged = u;
 					httpSession.setAttribute("user", logged);
+					List<Reservation> checkReservations = reservationService.findReservationByStatus(u, ReservationStatus.CONFIRMED);
+					for(int i=0;i<checkReservations.size();i++) {
+						String stringDate = checkReservations.get(i).getTerm().getTermDate()+" "+checkReservations.get(i).getTerm().getTermTime();
+						System.out.println("string "+stringDate);
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+						Date date = dateFormat.parse(stringDate);
+						System.out.println("date "+date);
+						System.out.println(date.compareTo(new Date()));
+						if(date.compareTo(new Date())<0) {
+							reservationService.update(checkReservations.get(i).getId(), ReservationStatus.WATCHED);
+						}
+					}
+					ArrayList<Reservation> reservationsWaiting = reservationService.findWaitingReservations(ReservationStatus.WAITING);
+					
+					for (int i = 0; i < reservationsWaiting.size(); i++) {
+						if(DateUtils.addDays(reservationsWaiting.get(i).getTimeOfReservation(),1).compareTo(new Date())<0) {
+							try {
+								deleteReservation(reservationsWaiting.get(i).getId());
+							} catch (ClassNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+					
 					break;
 				
 				}else {
@@ -184,6 +228,9 @@ public class UserController {
 				}
 			}
 		}
+//		za inicijalno kreiranje halls i terms zbog seats
+//			createData();
+		
 		return new ResponseEntity<User>(logged, HttpStatus.OK);
 	}
 	
@@ -204,62 +251,6 @@ public class UserController {
 		List<User> allUsers = userService.findAll();
 		List<User> friends = new ArrayList<>();
 		
-/*		for(User u : allUsers)
-		{
-			System.out.println("za usera " + u.getName());
-			List<Friendship> friendship = friendshipService.findBySender(u);
-			if(u.getStatus().equals(Status.ACTIVATED) && !friendship.isEmpty())
-			{
-				
-					for(Friendship fr : friendship)
-					{	
-						System.out.println("fr " + fr.getId());
-						if(u.getName().toLowerCase().startsWith(name.toLowerCase()) && u.getSurname().toLowerCase().startsWith(surname.toLowerCase()))
-						{	
-							UserDTO udto = new UserDTO(fr.getReciever(), fr.getStatus());
-							hs.add(udto);
-							System.out.println("1 " + udto.getName());
-						}else if(u.getName().toLowerCase().startsWith(name.toLowerCase()) && surname.equals(" "))
-						{	UserDTO udto = new UserDTO(fr.getReciever(), fr.getStatus());
-							hs.add(udto);
-							System.out.println("2 " + udto.getName());
-						}
-						else if(u.getSurname().toLowerCase().startsWith(surname.toLowerCase()) && name.equals(" "))
-						{	UserDTO udto = new UserDTO(fr.getReciever(), fr.getStatus());
-							hs.add(udto);
-							System.out.println("3 " + udto.getName());
-						}
-						else if(name.equals(" ") && surname.equals(" "))
-						{	UserDTO udto = new UserDTO(fr.getReciever(), fr.getStatus());
-							System.out.println("dodao " + udto.getName());
-							hs.add(udto);
-						}
-					}
-				}else if(u.getStatus().equals(Status.ACTIVATED) && friendship.isEmpty())
-				{
-					System.out.println("dole za usera " + u.getName());
-					if(u.getName().toLowerCase().startsWith(name.toLowerCase()) && u.getSurname().toLowerCase().startsWith(surname.toLowerCase()))
-					{
-					UserDTO udto = new UserDTO(u, null);
-					hs.add(udto);
-					System.out.println("4 " + udto.getName());
-					}else if(u.getName().toLowerCase().startsWith(name.toLowerCase()) && surname.equals(" "))
-					{	UserDTO udto = new UserDTO(u, null);
-						hs.add(udto);
-						System.out.println("5 " + udto.getName());
-					}
-					else if(u.getSurname().toLowerCase().startsWith(surname.toLowerCase()) && name.equals(" "))
-					{	UserDTO udto = new UserDTO(u, null);
-						hs.add(udto);
-						System.out.println("6 " + udto.getName());
-					}
-					else if(name.equals(" ") && surname.equals(" "))
-					{	UserDTO udto = new UserDTO(u, null);
-						hs.add(udto);
-						System.out.println("doel dodao " + udto.getName());
-					}
-					}
-			}*/
 		
 		for(User u : allUsers)
 		{
@@ -335,6 +326,26 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/getNames", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<String>> getUsersNames(@RequestBody String friends)
+	{
+		System.out.println(friends);
+		
+		return new ResponseEntity<List<String>>(HttpStatus.OK);
+	}
+	
+	public void deleteReservation(Long id) throws ClassNotFoundException, IOException, ParseException{
+		System.out.println("brisanje");
+		
+		Reservation reservation = reservationService.findOne(id);
+		SeatMap currSeatMap = (SeatMap) SeatMap.convertToSeatMap(reservation.getTerm().getSeats());
+		currSeatMap.getFreeSeats()[reservation.getRow()][reservation.getColumn()]=true;
+		termService.update(reservation.getTerm().getId(),SeatMap.convertToBytes(currSeatMap));	
+		
+		reservationService.delete(id);
+		return;
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void createData() {
 		SeatMap seatMap = new SeatMap(5, 5);
@@ -362,7 +373,7 @@ public class UserController {
 		}
 		
 		Hall hall = new Hall();
-		hall.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
+		hall.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(1)));
 		hall.setColumns(5);
 		hall.setRows(5);
 		hall.setName("A1");
@@ -370,7 +381,7 @@ public class UserController {
 		hallService.createNewHall(hall);
 		
 		Hall hall1 = new Hall();
-		hall1.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
+		hall1.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(1)));
 		hall1.setColumns(5);
 		hall1.setRows(5);
 		hall1.setName("A2");
@@ -378,7 +389,7 @@ public class UserController {
 		hallService.createNewHall(hall1);
 		
 		Hall hall2 = new Hall();
-		hall2.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
+		hall2.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(1)));
 		hall2.setColumns(5);
 		hall2.setRows(5);
 		hall2.setName("B1");
@@ -386,24 +397,24 @@ public class UserController {
 		hallService.createNewHall(hall2);
 	
 		Projection pr1 = new Projection();
-		pr1.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
+		pr1.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(1)));
 		pr1.setActors("Actors");
 		pr1.setDescription("Desc");
 		pr1.setDirector("Dir");
 		pr1.setDuration(new Date(1, 1, 2019, 1, 0));
 		pr1.setGenre("Gen");
 		pr1.setName("Film");
-		projectionService.createNewProjection(pr1);
+		projectionService.save(pr1);
 		
 		Projection pr2 = new Projection();
-		pr2.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(0)));
+		pr2.setCinemaTheater(cinemaTheaterService.findOne(Long.valueOf(1)));
 		pr2.setActors("Actors");
 		pr2.setDescription("Desc");
 		pr2.setDirector("Dir");
 		pr2.setDuration(new Date(1, 1, 2019, 2, 0));
 		pr2.setGenre("Gen");
 		pr2.setName("Filmovi");
-		projectionService.createNewProjection(pr2);
+		projectionService.save(pr2);
 		
 		Term term1 = new Term();
 		term1.setHall(hallService.findOne(Long.valueOf(1)));
@@ -411,8 +422,9 @@ public class UserController {
 		term1.setPriceRegular(50);
 		term1.setPriceVip(150);
 		term1.setProjection(projectionService.findOne(Long.valueOf(1)));
-		term1.setTermDate(new Date(14, 4, 2018));
-		term1.setTermTime(new Date());
+		term1.setTermDate("2018-11-08");
+		term1.setTermTime("20:00");
+		term1.setSeats(byteMap);
 		termService.createNewTerm(term1);		
 		
 		Term term2 = new Term();
@@ -421,8 +433,9 @@ public class UserController {
 		term2.setPriceRegular(50);
 		term2.setPriceVip(150);
 		term2.setProjection(projectionService.findOne(Long.valueOf(1)));
-		term2.setTermDate(new Date(15, 4, 2018));
-		term2.setTermTime(new Date());
+		term2.setTermDate("2019-02-15");
+		term2.setTermTime("13:00");
+		term2.setSeats(byteMap);
 		termService.createNewTerm(term2);
 		
 		Term term3 = new Term();
@@ -431,8 +444,10 @@ public class UserController {
 		term3.setPriceRegular(50);
 		term3.setPriceVip(150);
 		term3.setProjection(projectionService.findOne(Long.valueOf(2)));
-		term3.setTermDate(new Date(16, 4, 2018));
-		term3.setTermTime(new Date());
+		term3.setTermDate("2020-01-18");
+		term3.setTermTime("17:00");
+		term3.setSeats(byteMap);
 		termService.createNewTerm(term3);
 	}
+	
 }

@@ -1,0 +1,19 @@
+<div class="tab" >
+  <button class="tablinks btn btn-large centered" ng-click="showTab(3)">RESERVATION LIST</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(4)">MAKE A RESERVATION</button>
+</div>
+
+	 <div ng-show="tabView == 3">
+			<p class="text-center">reservation list</p>
+			<div ng-include="'userPages/reservationList.html'"></div>
+	</div>
+    <div ng-show="tabView == 4"> <!-- ng-include="'userPages/reservationStep1.html'"> -->
+       <p class="text-center">make a reservation</p>
+          	<div ng-if="step == 1" ng-include="'userPages/reservationStep1.html'"></div>
+			<div ng-if="step == 2" ng-include="'userPages/reservationStep2.html'"></div>
+			<div ng-if="step == 3" ng-include="'userPages/reservationStep3.html'"></div>
+			<div ng-if="step == 4" ng-include="'userPages/reservationStep4.html'"></div>
+			<div ng-if="step == 5" ng-include="'userPages/reservationStep5.html'"></div>
+    </div>
+     
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">     	

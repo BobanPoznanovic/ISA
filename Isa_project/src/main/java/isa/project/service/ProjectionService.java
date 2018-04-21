@@ -6,15 +6,21 @@ import isa.project.domain.CinemaTheater;
 import isa.project.domain.Projection;
 
 public interface ProjectionService {
-		
+
 	Projection findOne(Long id);
 	
-	List<Projection> findAll(CinemaTheater cinemaTheater);
+	List<Projection> findAll();
 	
-	Projection createNewProjection(Projection projection);
-		
+	Projection save(Projection projection);
+	
+	List<Projection> save(List<Projection> projection);
+	
 	Projection delete(Long id);
-		
-	Projection update(Long id);
 
+	void delete(List<Long> ids);
+	
+	public List<Projection> findByName(String name);
+	
+	public List<Projection> findById(CinemaTheater ct);
+	
 }

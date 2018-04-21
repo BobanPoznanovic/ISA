@@ -1,6 +1,6 @@
+<div ng-controller="HomePageController">
 <header>
 	<!-- Header desktop -->
-	<div ng-controller="HomePageController">
 	<div class="wrap-menu-header gradient1 trans-0-4">
 		<div class="container h-full">
 			<div class="wrap_header trans-0-3">
@@ -28,7 +28,7 @@
 								<button class="btn btn-large" ng-click="show(3)">FRIENDS</button> 
 							</li>	
 							<li>
-								<button class="btn btn-large" ng-click="show(4)">RESERVATION</button> 
+								<button class="btn btn-large" ng-click="show(4); getReservations()">RESERVATION</button> 
 							</li>
 							<li> 
 								<button class="btn btn-large" ng-click="show(5)">SETTINGS</button> 
@@ -36,7 +36,6 @@
 							<li> 
 								<button class="btn btn-large" ng-click="logout()">LOG OUT</button>
 							</li>	
-									<!--  href="../userPages/userSettings.html"	-->	
 						</ul>
 					</nav>
 				</div>
@@ -47,7 +46,7 @@
 			<p class="text-center">PROFILE INFO</p>
            	   <div class="form-group">
            		<p class="text-dark" for="name"><em>First name</em></p>
-               	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="loggedIn.name" readonly>{{loggedIn}}
+               	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="loggedIn.name" readonly>
                </div>
                
                <div class="form-group">
@@ -60,24 +59,25 @@
                	<input type="email" name="email" class="r-form-email form-control" id="email" ng-model="loggedIn.email" readonly>
                </div>
                
-               <!-- <div class="form-group">
-               	<p class="text-dark" for="name"><em>City</em></p>
-               	<input type="text" name="city" class="r-form-email form-control" id="city" ng-model="loggedIn.city" readonly>
-               </div>
-               
-                <div class="form-group">
+               <div class="form-group">
                	<p class="text-dark" for="name"><em>Phone number</em></p>
-               	<input type="text" name="phoneNumber" class="r-form-email form-control" id="phone" ng-model="loggedIn.phone" readonly>
-               </div> -->
-               
+               	<input type="email" name="phone" class="r-form-email form-control" id="phone" ng-model="loggedIn.phone" readonly>
+               </div>
 			</div>
+			
+			<div ng-if="numberView == 0" ng-include="'userPages/watchedReservations.html'"></div>
+			<div ng-if="numberView == 1" ng-include="'userPages/theaterForm.html'"></div>
+			<div ng-if="numberView == 2" ng-include="'userPages/cinemasForm.html'"></div>
 			<div ng-if="numberView == 3" ng-include="'userPages/userFriends.html'"></div>
+		    <div ng-if="numberView == 4" ng-include="'userPages/reservation.html'"></div> 
 			<div ng-if="numberView == 5" ng-include="'userPages/userSettings.html'"></div>
-			<div ng-if="lastSearch == 'friends'" ng-include="'userPages/userFriendsTable.html'">
-	</div>
+			<div ng-if="lastSearch == 'friends'" ng-include="'userPages/userFriendsTable.html'"></div>
+			<div ng-if="lastSearch == 'cinemas'" ng-include="'userPages/cinemasTable.html'"></div>
+			<div ng-if="lastSearch == 'theaters'" ng-include="'userPages/theatersTable.html'"></div>
+			<div ng-if="lastSearch == 'projections'" ng-include="'userPages/projectionsTable.html'"></div>
 	</div>
 </header>
-
+</div>
 
 
 <!-- Back to top -->

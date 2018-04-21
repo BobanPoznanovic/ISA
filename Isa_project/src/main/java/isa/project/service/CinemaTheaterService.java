@@ -21,4 +21,7 @@ public interface CinemaTheaterService {
 	
 	public List<CinemaTheater> findByType(enumProjection type);
 	
+	public List<CinemaTheater> searchCinemas(String name, String address/*, String city*/);
+	
+	public List<CinemaTheater> searchTheaters(String name, String address/*, String city*/);
 }

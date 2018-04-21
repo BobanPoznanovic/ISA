@@ -6,7 +6,7 @@ import isa.project.domain.User;
 
 public interface UserService {
 	
-    User findOne(Long id);
+	User findOne(Long id);
 	
 	List<User> findAll();
 	
@@ -17,5 +17,7 @@ public interface UserService {
 	User update(Long id);
 	
 	User login(User user);
+	
+//	User update(User user);
 
 }
