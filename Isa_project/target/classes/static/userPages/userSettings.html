@@ -1,4 +1,83 @@
 <div class="col-sm-4 col-sm-offset-1">
+	<p class="text-center">UPDATE PROFILE INFO</p>
+	<form name="registrationForm" role="form" action="" method="post" class="r-form">
+     	<div class="form-group">
+     		<label class="sr-only" for="r-form-first-name">First name</label>
+         	<input type="text" name="name" placeholder="First name..." class="r-form-first-name form-control" id="name" ng-model="editUser.name" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-maxlength="30" required>
+         		<div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+         </div>
+         
+         <div class="form-group">
+         	<label class="sr-only" for="r-form-last-name">Last name</label>
+         	<input type="text" name="surname" placeholder="Last name..." class="r-form-last-name form-control" id="surname" ng-model="editUser.surname" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-maxlength="30" required>
+   				<div ng-messages="registrationForm.surname.$error" ng-messages-include="messages.html"></div>
+         </div>
+         
+         <div class="form-group">
+         	<label class="sr-only" for="r-form-email">Email</label>
+         	<input type="email" name="email" placeholder="Email..." class="r-form-email form-control" id="email" ng-model="editUser.email" username-available ng-blur="verifyDuplicate(editUser.email)" required>
+         	 	<div ng-show="duplicate"><p style="color:red">Email exists already</p></div>
+         	 	<div ng-messages="registrationForm.email.$error" ng-messages-include="messages.html"></div>
+         </div>
+         
+         <div class="form-group">
+         	<label class="sr-only" for="r-form-email">Password</label>
+         	<input type="password" name="password" placeholder="New password..." class="r-form-email form-control" id="password" ng-model="editUser.password" required>
+         		<div ng-messages="registrationForm.password.$error" ng-messages-include="messages.html"></div>
+         </div>
+         
+          <div class="form-group">
+         	<label class="sr-only" for="r-form-passwordc">Confirm password</label>
+         	<input type="password" name="passwordc" placeholder="Confirm new password..." class="r-form-email form-control" id="passwordc" ng-model="editUser.passwordc" ng-blur="verifyPassword(editUser.password, editUser.passwordc)" required>
+         		<div ng-show="noMatch"><p style="color:red">Passwords don't match</p></div>
+         		<div ng-messages="registrationForm.passwordc.$error" ng-messages-include="messages.html"></div> 
+         </div>
+         
+          <div class="form-group">
+         	<label class="sr-only" for="r-form-email">City</label>
+         	<input type="text" name="city" placeholder="City..." class="r-form-email form-control" id="city" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-model="editUser.city" required>
+         		<div ng-messages="registrationForm.city.$error" ng-messages-include="messages.html"></div>
+         </div>
+         
+          <div class="form-group">
+         	<label class="sr-only" for="r-form-email">Phone number</label>
+         	<input type="text" name="phoneNumber" placeholder="Phone number..." class="r-form-email form-control" id="phone" ng-pattern="/^\+?\d{9,10}$/" ng-model="editUser.phone" >
+         		<div ng-show="registrationForm.phoneNumber.$error.required"><p style="color:red">Required</p></div>
+         		<div ng-show="registrationForm.phoneNumber.$error.pattern"><p style="color:red">Enter only 9 or 10 digits </p></div>
+          </div>
+          
+   	    <a href="#/homePage"><button ng-disabled="registrationForm.$invalid" type="submit" class="btn btn-danger" ng-click="updateUser()">Confirm</button></a>
+		<a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="resetUser()">Cancel</button></a>
+		
+	</form>
+	
+<div ng-show="loginUserRole==2" ng-controller = "FunZoneController" class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>price</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="ad in adsForApproved"
+				ng-click="setSelected(ad)"
+				ng-class="{'info' : selected===ad}">
+					<td>{{ad.name}}</td>
+					<td>{{ad.description}}</td>
+					<td>{{ad.price}}</td>
+					<td><button type="button" class="btn btn-primary" ng-click="approvedAd(ad)">Odobri oglas</button></td>
+					<td><button type="button" class="btn btn-primary" ng-click="rejectedAd(ad)">Odbi oglas</button></td>
+	
+				</tr>
+			</tbody>
+		</table>
+
+</div>	
 
 <div ng-show="loginUserRole==1" role="form" ng-controller = "FunZoneController">
 
@@ -65,8 +144,7 @@
 	                        		<div ng-show="registrationForm.phoneNumber.$error.required"><p style="color:red">Required</p></div>
 	                        		<div ng-show="registrationForm.phoneNumber.$error.pattern"><p style="color:red">Enter only 9 or 10 digits </p></div>
 	                        </div>
-	                        
-				            <a href="#/systemAdmin"><button ng-disabled="registrationForm.$invalid" type="submit" class="btn btn-danger" ng-click="registerAdmin()">Sign up new admin</button></a>
+				            <a href="#/homePage"><button ng-disabled="registrationForm.$invalid" type="submit" class="btn btn-danger" ng-click="registerAdmin()">Sign me up!</button></a>
 
 						</form>
 						
@@ -79,7 +157,82 @@
         </div>
 </div>
 
+<div ng-show="loginUserRole==1" role="form" ng-controller = "FunZoneController">
+<h1 class="page-header">Change ratings</h1>
+<form class="form-horizontal" name="myForm" novalidate
+	style="width: 50%">
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Login rating:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter rating" name="changeLoginRating"
+				required ng-Model="creditRating.loginRating" id="changeLoginRating" pattern = "[0-9]*" ng-minlength="1" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.changeLoginRating.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.changeLoginRating.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.changeLoginRating.$error.pattern">
+       Must insert numbers!</span>
+    </div>
+	
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Login rating:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter rating" name="changeBuyOfficialPropRating"
+				required ng-Model="creditRating.forBuyOfficialProp" id="changeBuyOfficialPropRating" pattern = "[0-9]*" ng-minlength="1" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.changeBuyOfficialPropRating.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.changeBuyOfficialPropRating.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.changeBuyOfficialPropRating.$error.pattern">
+       Must insert numbers!</span>
+    </div>
 
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Login rating:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter rating" name="changeBuyUsedPropRating"
+				required ng-Model="creditRating.forBuyUsedProp" id="changeBuyUsedPropRating" pattern = "[0-9]*" ng-minlength="1" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.changeBuyUsedPropRating.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.changeBuyUsedPropRating.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.changeBuyUsedPropRating.$error.pattern">
+       Must insert numbers!</span>
+    </div>
+    
+    <div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Login rating:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter rating" name="changeSendOfferRating"
+				required ng-Model="creditRating.forSendOffer" id="changeSendOfferRating" pattern = "[0-9]*" ng-minlength="1" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.changeSendOfferRating.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.changeSendOfferRating.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.changeSendOfferRating.$error.pattern">
+       Must insert numbers!</span>
+    </div>
+
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-success"
+				ng-Click="changeRatings()">Submit</button>
+		</div>
+	</div>
+</form>
+</div>
 
  </div>
         	
