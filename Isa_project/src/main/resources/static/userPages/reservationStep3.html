@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="bootstrap/seatStyle.css">
+<div class="col-sm-4 col-sm-offset-1" >
+	<p class="text-center">reservation step 3</p>
+	<form name="reserveStep3Form" role="form" action="" method="post" class="r-form">
+			<div class="form-group">
+				<label for="reserve-form"><p>Hall:</p></label>
+				<select class="form-control" name="hall" id="hall" ng-model="halls.id"style="padding: 1px 3px;" ng-change="getRowsColumns()" ng-init="getTakenSeats()" required> <!--ng-init="getRowsColumns()"  -->
+					<option value="" selected hidden>-- Select an option --</option>
+					<option ng-repeat="hall in halls" value={{hall.id}}>{{hall.name}}</option>
+					<div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+				</select>
+			</div>
+			  <div>
+			  	<label for="reserve-form"><p>Choose seats:</p></label>
+				 <span ng-repeat="row in matrix track by $index" ><br>
+				     <span ng-repeat="element in row track by $index">
+				     	 <input type="checkbox" ng-model="matrix[$parent.$index][$index]" rows="1" cols="1" ng-true-value="false" ng-false-value="true" ng-disabled="!renderMatrix[$parent.$index][$index]" ng-change="showChanged()"> <!-- ng-disabled="shouldDisable($parent.$index,$index)" -->   
+				 	 </span>
+				  </span>
+			  </div>  
+		<div>
+	 	    <a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="previousStep()">Previous</button></a>
+		  	<a href="#/homePage"><button ng-disabled="reserveStep3Form.$invalid" type="submit" class="btn btn-default" ng-click="nextStep(); getFriends()">Next</button></a>
+		</div>
+	</form>
+</div>

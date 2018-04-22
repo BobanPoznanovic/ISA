@@ -1,0 +1,32 @@
+<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>price</th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="ad in officialAds"
+				ng-click="setSelected(ad)"
+				ng-class="{'info' : selected===ad}">
+					<td>{{ad.name}}</td>
+					<td>{{ad.description}}</td>
+					<td>{{ad.price}}</td>
+					<td><button type="submit" class="btn btn-success"
+				ng-Click="$parent.buyProp(ad)" title="Form invalid!"
+				data-toggle="tooltip" data-placement="top" tooltip> Rezervisi</button></td>
+				<td><button ng-show="loginUserRole==2" type="button" class="btn btn-success"
+				ng-Click="change(ad)">Change</button></td>
+				<td><button ng-show="loginUserRole==2" type="submit" class="btn btn-success"
+				ng-Click="remove(ad)">Remove</button></td>
+				</tr>
+			</tbody>
+		</table>
+	<div ng-show="showChange==1" ng-include src="'changeAd.html'"></div>
+</div>

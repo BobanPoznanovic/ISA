@@ -1,0 +1,28 @@
+<h1 class="page-header">Give offer</h1>
+<form class="form-horizontal" name="myForm" novalidate
+	style="width: 50%">
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Offer:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter offer" name="offerGive"
+				required ng-Model="offer" id="rn6" pattern = "[0-9]*" ng-minlength="1" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.offerGive.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.offerGive.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.offerGive.$error.pattern">
+       Must insert numbers!</span>
+    </div>
+	
+
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-success"
+				ng-Click="$parent.sendOffer(offer)" title="Form invalid!"
+				data-toggle="tooltip" data-placement="top" ng-disabled="myForm.$invalid" tooltip>Submit</button>
+		</div>
+	</div>
+</form>

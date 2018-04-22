@@ -1,0 +1,35 @@
+
+
+<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>photo</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="ad in ads"
+				ng-click="setSelected(ad)"
+				ng-class="{'info' : selected===ad}">
+					<td>{{ad.id}}</td>
+					<td>{{ad.name}}</td>
+					<td>{{ad.description}}</td>
+					<td><img src="{{ad.photo}}" height="42" width="42"></td>
+					<td><button type="button" class="btn btn-primary"
+				ng-Click="viewOffers(1)" >Posalji ponudu</button></td>
+				<td><button type="button" class="btn btn-primary"
+				ng-Click="viewOffers(2)" >Pogledaj ponude</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<div ng-show="showOffers==1" ng-include src="'giveOffer.html'"></div>
+		<div ng-show="showOffers==2" ng-include src="'viewOffers.html'"></div>
+</div>

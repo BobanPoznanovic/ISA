@@ -1,0 +1,55 @@
+<h1 class="page-header">Change ad</h1>
+<form class="form-horizontal" name="myForm" novalidate
+	style="width: 50%">
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="rn">Name:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" placeholder="Enter name" name="name"
+				required ng-Model="$parent.official.name" id="changeName" pattern = "^[A-Z][a-z_ A-Z]*" ng-minlength="3" ng-maxlength="30">
+		</div>
+	</div>
+	<div role="alert" style="color:red">
+      <span class="error" ng-show="myForm.name.$error.minlength">
+        Too short!</span>
+      <span class="error" ng-show="myForm.name.$error.maxlength">
+        Too long!</span>
+         <span class="error" ng-show="myForm.name.$error.pattern">
+        Example with all permited letters : "Sasa_da nekaNsda" !</span>
+    </div>
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="des">Description:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" id="changeDes" name="des"
+				placeholder="Enter description" required
+				ng-Model="official.description" pattern = "^[A-Z][a-z_ A-Z0-9]*" ng-maxlength="50">
+		</div>
+	</div>
+	 <div role="alert" style="color:red">
+       <span class="error" ng-show="myForm.des.$error.maxlength">
+        Too long!</span>
+        <span class="error" ng-show="myForm.des.$error.pattern">
+        Example with all permited letters : "Sasa_da nekaNsda87" !</span>
+    </div>
+
+     <div class="form-group">
+		<label class="control-label col-sm-3" for="date">Price:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" id="changePrice" name="price"
+				placeholder="Enter price" required
+				ng-Model="official.price">
+		</div>
+	</div>
+	</div>
+		 <div role="alert" style="color:red">
+       <span class="error" ng-show="myForm.price.$error.maxlength">
+        Too long!</span>
+        <span class="error" ng-show="myForm.price.$error.pattern">
+        Example with all permited letters : "Sasa_da nekaNsda87" !</span>
+    </div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-success"
+				ng-Click="changeAd(official)">Submit</button>
+		</div>
+	</div>
+</form>

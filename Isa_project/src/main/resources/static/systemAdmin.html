@@ -1,0 +1,58 @@
+<div ng-controller="HomePageController">
+<header>
+	<!-- Header desktop -->
+	<div class="wrap-menu-header gradient1 trans-0-4">
+		<div class="container h-full">
+			<div class="wrap_header trans-0-3">
+				<!-- Logo -->
+				<div class="logo">
+					<a href="#/">
+						<img src="bootstrap/images/icons/movie.png"  height="50" width="110" alt="IMG-LOGO" data-logofixed="bootstrap/images/icons/logo2.png">
+					</a>
+				</div>
+
+				<!-- Menu -->
+				<div class="wrap_menu p-l-45 p-l-0-xl">
+					<nav class="menu"> 
+						<ul class="main_menu">
+							<li> 
+								<button class="btn btn-large" ng-click="show(5)">ADD NEW FUN ZONE ADMIN</button> 
+							</li>
+							<li> 
+								<button class="btn btn-large" ng-click="show(6)">ADD NEW SYSTEM ADMIN</button> 
+							</li>	
+							<li> 
+								<button class="btn btn-large" ng-click="show(2)">ADD NEW CINEMA</button>
+							</li>	
+							<li> 
+								<button class="btn btn-large" ng-click="show(1)">ADD NEW THEATER</button>
+							</li>	
+							
+								<button class="btn btn-large" ng-click="logout()">LOGOUT</button>
+							</li>	
+						</ul>
+					</nav>
+				</div>
+			</div>
+			<div ng-if="numberView == 1" ng-include="'Theaters.html'"></div>
+			<div ng-if="numberView == 2" ng-include="'Cinemas.html'"></div>
+			<div ng-if="numberView == 6" ng-include="'userPages/addNewAdmin.html'"></div>
+			<div ng-if="numberView == 5" ng-include="'userPages/userSettings.html'"></div>
+		</div>
+	
+		
+		
+</header>
+
+<!--ovde dodati novu formu za dodavanje admina-->
+
+</div>
+
+
+
+
+<!-- </div> -->
+
+
+
+

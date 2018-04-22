@@ -1,0 +1,27 @@
+<div ng-controller = "FunZoneController" class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>price</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="ad in adsForApproved"
+				ng-click="setSelected(ad)"
+				ng-class="{'info' : selected===ad}">
+					<td>{{ad.name}}</td>
+					<td>{{ad.description}}</td>
+					<td>{{ad.price}}</td>
+					<td><button type="button" class="btn btn-primary" ng-click="approvedAd(ad)">Odobri oglas</button></td>
+					<td><button type="button" class="btn btn-primary" ng-click="rejectedAd(ad)">Odbi oglas</button></td>
+	
+				</tr>
+			</tbody>
+		</table>
+
+</div>

@@ -1,0 +1,27 @@
+<div class="col-sm-4 col-sm-offset-1">
+	<p class="text-center">reservation step 1</p>
+	<form name="reserveStep1Form" role="form" action="" method="post" class="r-form">
+	    	<div class="form-group">
+				<label for="reserve-form"><p>Type:</p></label>
+				<select class="form-control" name="reserveTypes" id="reserveTypes" ng-model="reserveTypes.value" ng-change="typeChanged()" style="padding: 1px 3px;" required>
+					<option value="" selected hidden>-- Select an option --</option>
+					<option value="cinema">cinema</option>
+					<option value="theater">theater</option>
+					<div ng-messages="registrationForm.email.$error" ng-messages-include="messages.html"></div>
+				</select>
+			</div>	
+	        
+	        <div class="form-group">
+				<label for="reserve-form"><p>Name:</p></label>
+				<select class="form-control" name="model" id="reserve-form" ng-model="all.id" ng-change="ctNameChanged()" style="padding: 1px 3px;" required>
+				    <option value="" selected hidden>-- Select an option --</option>
+					<option ng-repeat="item in all" value="{{item.id}}">{{item.name}}</option>
+					<div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+				</select>
+			</div>	
+	        <!-- ; getProjections(all.id)" -->
+	  	   <a href="#/homePage"><button ng-disabled="reserveStep1Form.$invalid" type="submit" class="btn btn-default" ng-click="nextStep()">Next</button></a>
+		
+	</form><!-- ; searchFriendship() -->
+	<!-- <div ng-if="lastSearch == 'cinemas'" ng-include="'userPages/cinemasTable.html'"></div> -->
+</div>

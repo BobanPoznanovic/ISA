@@ -1,0 +1,51 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div ng-controller="HomePageController" ng-if="numberView == 2">
+<table class="table table-hover" style="width:100%;">
+	<thead>
+		<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+		<th><a href="#/homePage" ng-click="sortType = 'adress'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'adress' && !sortReverse"></span>Address <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+   		<th><a href="#/homePage" ng-click="sortType = 'city'; sortReverse =! sortReverse">
+   			<span ng-show="sortType == 'city' && !sortReverse"></span>City <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+   		<th><a href="#/homePage" ng-click="sortType = 'rating'; sortReverse =! sortReverse">
+   			<span ng-show="sortType == 'rating' && !sortReverse"></span>Rating <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+		<!-- <th><a>Repertoire</a></th> -->
+	</thead>
+	
+	<tbody>
+		<tr ng-repeat="result in cinemas | orderBy:sortType:sortReverse" ng-click="setSelected(result) "
+		class="ng-class:{'selected-row': selected === result}">
+			<td>{{result.name}}</td>
+			<td>{{result.adress}}</td>
+			<td>{{result.city}}</td>
+			<td>{{result.rating}}</td>
+			<!-- <td><div><span ng-repeat="rating in ratings" star-rating rating-value="rating.current" max="rating.max" >
+        </span></div></td> -->
+			
+     		<!-- <td> <jk-rating-stars rating="secondRate" read-only="readOnly" ></jk-rating-stars>
+      <div style="width: 100px">{{secondRate}} Stars</div></td> 
+			<th><span class="fa fa-star checked"></span></th>-->
+				<!-- <td>
+					<div><button type="button" class="btn btn-default" ng-click="">Look</button></div>
+				</td> -->
+			<!-- <td>
+				<a href="#/homePage"><button type="button" class="btn btn-default" ng-click="reserve(result)">Reserve</button></a>onclick="this.disabled=true"
+			</td> -->
+		</tr>
+	</tbody>
+</table>
+<div ng-if="numberView == 4" ng-include="'userPages/reservationStep1.html'"></div>
+</div>

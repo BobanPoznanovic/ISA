@@ -1,0 +1,55 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div ng-controller="HomePageController">
+<table class="table table-hover" style="width:100%;">
+	<thead>
+		<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+		<th><a href="#/homePage" ng-click="sortType = 'surname'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'surname' && !sortReverse"></span>Surname <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+		<th><a>Status</a></th>
+	</thead>
+	<tbody>
+	<!-- |orderBy:orderByField:reverseSort" -->
+		<tr ng-repeat="result in friends | orderBy:sortType:sortReverse" ng-click="setSelected(result) " ng-init="searchFriendship(result)"
+		class="ng-class:{'selected-row': selected === result}">
+			<td>{{result.name}}</td>
+			<td>{{result.surname}}</td>
+			<td>
+				<div ng-show="result.email != loggedIn.email && result.Action == 'notSent'"><button type="button" class="btn btn-default" onclick="this.disabled=true" ng-click="sendRequest(result); clickFunc(result)">Send request</button></div>
+				<div ng-show="result.email != loggedIn.email && result.Action == 'sent'"><button type="button" class="btn btn-default" disabled >Request sent</button></div>
+				<div ng-show="result.email != loggedIn.email && result.Action == 'friends'"><button type="button" class="btn btn-danger"ng-click="deleteFriendship(result)">Delete friend</button></div>
+				<div ng-show="result.email != loggedIn.email && result.Action == 'confirm'"><button type="button" class="btn btn-primary"ng-click="confirmRequest(result); clickFuncConfirm(result)">Confirm</button></div>
+			</td>
+			<!-- <td ng-repeat="id in recieverId">
+				<div ng-show="result.email != loggedIn.email <!-- && result.id != id" --><!-- ><button type="button" class="btn btn-default" ng-click="sendRequest(result)">Send request {{id}}</button></div> -->
+				<!-- <div ng-show="result.email != loggedIn.email && result.id == id"><button type="button" class="btn btn-default" disabled>Request sent {{id}} </button></div>
+				<button type="button" class="btn btn-danger" ng-click="$parent.removeCar(result)">X</button>	ng-init="result.Action = 'Send request'" {{result.Action}}		
+			</td>  -->
+		</tr>
+	</tbody>
+</table>
+
+	<!-- <div>
+		<ul ng-if="$parent.pager.pages.length" class="pagination">
+            <li ng-class="{disabled:$parent.pager.currentPage === 1}">
+                <a ng-click="$parent.setPage(1)">First</a>
+            </li>
+            <li ng-class="{disabled:$parent.pager.currentPage === 1}">
+                <a ng-click="$parent.setPage($parent.pager.currentPage - 1)">Previous</a>
+            </li>
+            <li ng-repeat="page in $parent.pager.pages" ng-class="{active:$parent.pager.currentPage === page}">
+                <a ng-click="$parent.setPage(page)">{{page}}</a>
+            </li>               
+            <li ng-class="{disabled:$parent.pager.currentPage === $parent.pager.totalPages}">
+                <a ng-click="$parent.setPage($parent.pager.currentPage + 1)">Next</a>
+            </li>
+            <li ng-class="{disabled:$parent.pager.currentPage === $parent.pager.totalPages}">
+                <a ng-click="$parent.setPage($parent.pager.totalPages)">Last</a>
+            </li>
+        </ul>
+    </div>  -->
+</div>

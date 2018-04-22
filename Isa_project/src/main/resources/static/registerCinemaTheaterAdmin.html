@@ -1,0 +1,77 @@
+<div role="form">
+
+        <!-- Top content -->
+        <div class="top-content" >
+        	<div class="container">
+                	
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-6 text">
+                        <div class="description">
+                        	<p>
+                        	</p>
+                        </div>
+                    </div>	
+                </div>
+                
+                <div class="row" >
+                    <div class="col-sm-10 col-sm-offset-1 show-forms" >
+                    	<!-- <span class="show-login-form active">Login</span>  -->
+                    	<!-- <span class="show-forms-divider">/</span>  -->
+                    	<span class="show-register-form active"><h2 class="page-header">Register cinema admin for {{$parent.selected.name}}</h2></span>
+                    </div>
+                </div>
+                 <div class="row register-form" >
+                    <div class="col-sm-4 col-sm-offset-1">
+						<form name="registrationForm" role="form" action="" method="post" class="r-form">
+	                    	<div class="form-group">
+	                    		<label class="sr-only" for="r-form-first-name">First name</label>
+	                        	<input type="text" name="name" placeholder="First name..." class="r-form-first-name form-control" id="name" ng-model="$parent.newCinemaAdmin.name" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-maxlength="30" required />
+	                        		<div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                        <div class="form-group">
+	                        	<label class="sr-only" for="r-form-last-name">Last name</label>
+	                        	<input type="text" name="surname" placeholder="Last name..." class="r-form-last-name form-control" id="surname" ng-model="$parent.newCinemaAdmin.surname" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-maxlength="30" required />
+	                  				<div ng-messages="registrationForm.surname.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                        <div class="form-group">
+	                        	<label class="sr-only" for="r-form-email">Email</label>
+	                        	<input type="email" name="email" placeholder="Email..." class="r-form-email form-control" id="email" ng-model="$parent.newCinemaAdmin.email" username-available ng-blur="verifyDuplicate($parent.newCinemaAdmin.email)" required />
+	                        	 	<div ng-show="duplicate"><p style="color:red">Email exists already</p></div>
+	                        	 	<div ng-messages="registrationForm.email.$error" ng-messages-include="messages.html"></div>
+	                        	 	
+	                        </div>
+	                        <div class="form-group">
+	                        	<label class="sr-only" for="r-form-email">Password</label>
+	                        	<input type="password" name="password" placeholder="Password..." class="r-form-email form-control" id="password" ng-model="$parent.newCinemaAdmin.password" required />
+	                        		<div ng-messages="registrationForm.password.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                         <div class="form-group">
+	                        	<label class="sr-only" for="r-form-passwordc">Confirm password</label>
+	                        	<input type="password" name="passwordc" placeholder="Confirm password..." class="r-form-email form-control" id="passwordc" ng-model="$parent.newCinemaAdmin.passwordc" ng-blur="verifyPassword($parent.newCinemaAdmin.password, $parent.newCinemaAdmin.passwordc)" required />
+	                        		<div ng-show="noMatch"><p style="color:red">Passwords don't match</p></div>
+	                        		<div ng-messages="registrationForm.passwordc.$error" ng-messages-include="messages.html"></div> 
+	                        		
+	                        </div>
+	                         <div class="form-group">
+	                        	<label class="sr-only" for="r-form-email">City</label>
+	                        	<input type="text" name="city" placeholder="City..." class="r-form-email form-control" id="city" ng-pattern="/^\b[A-Z][a-z]*(\s*\b[A-Z][a-z]*\b)*$/" ng-model="$parent.newCinemaAdmin.city" required />
+	                        		<div ng-messages="registrationForm.city.$error" ng-messages-include="messages.html"></div>
+	                        </div>
+	                         <div class="form-group">
+	                        	<label class="sr-only" for="r-form-email">Phone number</label>
+	                        	<input type="text" name="phoneNumber" placeholder="Phone number..." class="r-form-email form-control" id="phone" ng-pattern="/^\+?\d{9,10}$/" ng-model="$parent.newCinemaAdmin.phone" required />
+	                        		<div ng-show="registrationForm.phoneNumber.$error.required"><p style="color:red">Required</p></div>
+	                        		<div ng-show="registrationForm.phoneNumber.$error.pattern"><p style="color:red">Enter only 9 or 10 digits </p></div>
+	                        </div>
+				            <a href="#/systemAdmin"><button ng-disabled="registrationForm.$invalid" type="submit" class="btn btn-danger" ng-click="$parent.registerCinemaTheaterAdmin()">Sign me up!</button></a>
+
+						</form>
+						
+						
+          
+                </div>
+                    
+        	</div>
+        </div>
+        </div>
+</div>

@@ -1,0 +1,8 @@
+<div>
+	<button ng-show="loginUserRole==2" type="button" class="btn btn-primary" ng-click="$parent.showOfficialProps(1)">Create official ad</button>
+	<button type="button" class="btn btn-primary" ng-click="$parent.showOfficialProps(2)">See official ads</button>
+
+	<div ng-show="$parent.showOfficialPropsNum==1" ng-include src="'createOfficialAd.html'"></div>
+	<div ng-show="$parent.showOfficialPropsNum==2" ng-include src="'seeOfficialAds.html'"></div>
+	
+</div>

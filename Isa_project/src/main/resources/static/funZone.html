@@ -1,0 +1,12 @@
+<div ng-controller="FunZoneController">
+	<div class="container" >
+		<button type="button" class="btn btn-primary" ng-click=showView(1)>Used props</button>
+		<button type="button" class="btn btn-primary" ng-click=showView(2)>Official props</button>
+		<button ng-show="loginUserRole==1" type="button" class="btn btn-primary" ng-click=showView(3)>Register admin</button>
+		
+		<div ng-show="show==1" ng-include src="'usedProp.html'"></div>
+		<div ng-show="show==2" ng-include src="'officialProp.html'"></div>
+		<div ng-show="show==3" ng-include src="'registerFunZoneAdmin.html'"></div>
+		
+	</div>
+</div>

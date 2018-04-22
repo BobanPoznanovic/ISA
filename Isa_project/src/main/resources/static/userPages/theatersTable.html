@@ -1,0 +1,49 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div ng-controller="HomePageController">
+<table class="table" style="width:100%;">
+	<thead>
+		<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+		<th><a href="#/homePage" ng-click="sortType = 'adress'; sortReverse =! sortReverse" >
+      			<span ng-show="sortType == 'adress' && !sortReverse"></span>Address <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+   		<th><a href="#/homePage" ng-click="sortType = 'city'; sortReverse =! sortReverse">
+   			<span ng-show="sortType == 'city' && !sortReverse"></span>City <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+   		<th><a href="#/homePage" ng-click="sortType = 'rating'; sortReverse =! sortReverse">
+   			<span ng-show="sortType == 'rating' && !sortReverse"></span>Rating <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+   			</a>
+   		</th>
+   		
+	</thead>
+	
+	<tbody>
+		<tr ng-repeat="result in theaters | orderBy:sortType:sortReverse" ng-click="setSelected(result) "
+		class="ng-class:{'selected-row': selected === result}">
+			<td>{{result.name}}</td>
+			<td>{{result.adress}}</td>
+			<td>{{result.city}}</td>
+			<td>{{result.rating}}</td>
+			<!-- <td>
+				<a href="#/homePage"><button class="btn btn-default" data-toggle="modal" data-target="#lookTheaterModal" ng-click="searchProj(result)">Search</button></a>
+			</td> -->
+			<!-- <td>
+				<div><button type="button" class="btn btn-default" ng-click="reserve()">Reserve</button></div>
+			</td> -->
+			<!-- <td ng-repeat="id in recieverId">
+				<div ng-show="result.email != loggedIn.email <!-- && result.id != id" --><!-- ><button type="button" class="btn btn-default" ng-click="sendRequest(result)">Send request {{id}}</button></div> -->
+				<!-- <div ng-show="result.email != loggedIn.email && result.id == id"><button type="button" class="btn btn-default" disabled>Request sent {{id}} </button></div>
+				<button type="button" class="btn btn-danger" ng-click="$parent.removeCar(result)">X</button>	ng-init="result.Action = 'Send request'" {{result.Action}}		
+			</td>  -->
+		</tr>
+	</tbody>
+</table>
+</div>
+<div ng-include="'modals/lookTheatherModal.html'"></div>

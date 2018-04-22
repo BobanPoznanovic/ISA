@@ -1,0 +1,74 @@
+<div class="tab">
+  <button class="tablinks btn btn-large centered" ng-click="showTab(0)">SEARCH FOR FRIENDS</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(1); getFriendsList()">FRIENDS LIST</button>
+  <button class="tablinks btn btn-large centered" ng-click="showTab(2); friendRequests()">FRIEND REQUESTS</button>
+</div>
+
+	  <div ng-show="tabView == 2">
+	  <p class="text-center">friend requests</p>
+	  <p class="text-center" ng-if="noRequest">No friend requests </p>
+          <table class="table table-hover" style="width:100%;">
+				<tbody>
+				<!-- |orderBy:orderByField:reverseSort" -->
+					<tr ng-if="status != 'accepted'" ng-repeat="result in friendRequest | orderBy:sortType:sortReverse" ng-click="setSelected(result)"
+					class="ng-class:{'selected-row': selected === result}" ng-if="!noRequest">
+						<td>{{result.name}}</td>
+						<td>{{result.surname}}</td>
+						<td>
+						<button type="button" class="btn btn-primary" ng-click="confirmRequest(result)">Confirm </button>
+						<button type="button" class="btn btn-danger" ng-click="deleteFriendship(result)">Delete request </button></td>
+							<!-- <button type="button" class="btn btn-danger" ng-click="$parent.removeCar(result)">X</button> -->			
+					</tr>
+				</tbody>
+			</table>
+       </div>
+  
+      <div ng-show="tabView == 1" ng-init="getFriendsList()">
+         <p class="text-center">friends list</p>
+          <table class="table table-hover" style="width:100%;">
+	          <thead>
+					<th><a href="#/homePage" ng-click="sortType = 'name'; sortReverse =! sortReverse" >
+			      			<span ng-show="sortType == 'name' && !sortReverse"></span>Name <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+			   			</a>
+			   		</th>
+					<th><a href="#/homePage" ng-click="sortType = 'surname'; sortReverse =! sortReverse" >
+			      			<span ng-show="sortType == 'surname' && !sortReverse"></span>Surname <span><i class="material-icons"><i class="material-icons">swap_vert</i></span>
+			   			</a>
+			   		</th>
+				</thead>
+				<tbody>
+				<!-- |orderBy:orderByField:reverseSort" -->
+					<tr ng-if="status != 'waiting'" ng-repeat="result in friendsList | orderBy:sortType:sortReverse" ng-click="setSelected(result)"
+					class="ng-class:{'selected-row': selected === result}">
+						<td>{{result.name}}</td>
+						<td>{{result.surname}}</td>
+						<td>
+						<button type="button" class="btn btn-danger" ng-click="deleteFriendship(result)">Delete friend </button></td>
+							<!-- <button type="button" class="btn btn-danger" ng-click="$parent.removeCar(result)">X</button> -->			
+					</tr>
+				</tbody>
+			</table>
+      </div>
+      <div ng-show="tabView == 0">
+          <div class="col-sm-4 col-sm-offset-1">
+			<p class="text-center">search for friends</p>
+			<form name="registrationForm" role="form" action="" method="post" class="r-form">
+		     	<div class="form-group">
+		     		<label class="sr-only" for="r-form-first-name">First name</label>
+		         	<input type="text" name="name" placeholder="First name..." class="r-form-first-name form-control" ng-model="friend.name" id="name" >
+		         </div>
+		         
+		         <div class="form-group">
+		         	<label class="sr-only" for="r-form-last-name">Last name</label>
+		         	<input type="text" name="surname" placeholder="Last name..." class="r-form-last-name form-control" ng-model="friend.surname" id="surname" >
+		         </div>
+		         
+		         
+		   	   <a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="searchForFriends(friend)">Search</button></a>
+				
+			</form><!-- ; searchFriendship() -->
+			<div ng-if="lastSearch == friends" ng-include="'userPages/userFriendsTable.html'"></div>
+		 </div>
+      </div>
+
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">     	

@@ -1,0 +1,28 @@
+<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>Offer</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<tr ng-repeat="offer in offers"
+				ng-click="$parent.setSelectedOffer(offers)"
+				ng-class="{'info' : selectedOffer===offer}">
+					<td>{{offer.user.name}}</td>
+					<td>{{offer.offer}}</td>
+
+					<td><button type="button" class="btn btn-primary"
+				ng-Click="acceptOffer(offer)" >Prihvati ponudu</button></td>
+				<td><button type="button" class="btn btn-primary"
+				ng-Click="changeShow(offer)" >Promeni ponudu</button></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div ng-show="showChangeOffer==1" ng-include src="'changeOffer.html'"></div>
+</div>

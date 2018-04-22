@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="bootstrap/seatStyle.css">
+<div class="col-sm-4 col-sm-offset-1" >
+	<p class="text-center">reservation step 5</p>
+	<div class="form-group">
+    	<div ng-show="reserveTypes.value === 'cinema'"><p class="text-dark" for="name"><em>Cinema name:</em></p></div>
+    	<div ng-show="reserveTypes.value === 'theater'"><p class="text-dark" for="name"><em>Theater name:</em></p></div>
+    	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="projectionName.cinemaTheater.name" readonly>
+    </div>
+    <div class="form-group">
+    	<label for="reserve-form"><p>Projection:</p></label>
+    	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="projectionName.name" readonly>
+    </div>
+     <div class="form-group">
+    	<label for="reserve-form"><p>Date:</p></label>
+    	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="dates.id" readonly>
+    </div>
+     <div class="form-group">
+    	<label for="reserve-form"><p>Time:</p></label>
+    	<input type="text" name="name" class="r-form-first-name form-control" id="name" ng-model="times.id" readonly>
+    </div>
+     <div class="form-group">
+    	<label for="reserve-form"><p>Invited friends:</p></label>
+    	<select class="form-control" name="hall" id="hall" ng-model="invitedFriends.id"style="padding: 1px 3px;" readonly> 
+    		<option value="" selected hidden>-- Friend you invited --</option>
+			<option ng-repeat="friend in invitedFriends" value={{friend}}>{{friend.name}} {{friend.surname}}</option>
+		</select>
+    </div>
+    
+			<a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="previousStep()">Previous</button></a>
+ 	  	    <a href="#/homePage"><button type="submit" class="btn btn-default" ng-click="makeReservation()">Reserve</button></a>
+		
+</div>
